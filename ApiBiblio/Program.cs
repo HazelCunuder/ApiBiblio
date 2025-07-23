@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ApiBiblio.Database;
+
 namespace ApiBiblio
 {
     public class Program
@@ -7,6 +10,8 @@ namespace ApiBiblio
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<BiblioDb>(options =>
+            options.UseNpgsql("Data Source=BiblioDb.db"));
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
