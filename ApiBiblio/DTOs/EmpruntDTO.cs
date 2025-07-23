@@ -11,8 +11,8 @@ namespace ApiBiblio.DTOs
         public int MembreId { get; set; }
 
         public EmpruntDTO() { }
-        public EmpruntDTO(Emprunt EmpruntItem) => 
+        public EmpruntDTO(Emprunt EmpruntItem) =>
 
-            (Id, DateEmprunt, DateRetour, MembreId) = (EmpruntItem.Id, EmpruntItem.DateRetour, EmpruntItem.DateEmprunt, EmpruntItem.MembreId)
+            (Id, DateEmprunt, DateRetour, MembreId) = (EmpruntItem.Id, EmpruntItem.DateRetour, EmpruntItem.DateEmprunt, EmpruntItem.MembreId);
     }
 }
