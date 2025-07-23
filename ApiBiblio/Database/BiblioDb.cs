@@ -41,5 +41,6 @@ namespace ApiBiblio.Database
         }
         public DbSet<ApiBiblio.DTOs.CategorieDTO> CategorieDTO { get; set; } = default!;
         public DbSet<ApiBiblio.Models.Employe_Emprunt> Employe_Emprunt { get; set; } = default!;
+        public DbSet<ApiBiblio.Models.Livre_Auteur> Livre_Auteur { get; set; } = default!;
     }
 }
