@@ -7,7 +7,7 @@
         public bool Disponible { get; set; } = true;
         public int AnnePublication { get; set; }
         public string? ISBN { get; set; }
-        public int CategorieId { get; set; }
-        public int EmpruntId { get; set; }
+        public int IdCategorie { get; set; }
+        public int IdEmprunt { get; set; }
     }
 }
