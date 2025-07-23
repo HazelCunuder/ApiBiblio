@@ -18,9 +18,24 @@ namespace ApiBiblio.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Permet de créer les tables d'associations
             base.OnModelCreating(modelBuilder);
 
+            // Définir une clé primaire composite sur Assigner Role
+            modelBuilder.Entity<AssignerRole>()
+                .HasKey(ca => new { ca.RoleId, ca.EmployeId });
 
+            // Définir une clé primaire composite sur Employe_Emprunt
+            modelBuilder.Entity<Employe_Emprunt>()
+                .HasKey(ca => new { ca.EmpruntId, ca.EmployeId });
+
+            // Définir une clé primaire composite sur Livre - Auteur
+            modelBuilder.Entity<Livre_Auteur>()
+                .HasKey(ca => new { ca.IdLivre, ca.IdAuteur });
+
+            // Définir une clé primaire composite sur Livre - Genre
+            modelBuilder.Entity<Livre_Genre>()
+                .HasKey(ca => new { ca.IdLivre, ca.IdGenre });
 
         }
     }
