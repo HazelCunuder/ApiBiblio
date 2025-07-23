@@ -11,6 +11,7 @@ namespace ApiBiblio
 
             // Add services to the container.
             builder.Services.AddDbContextPool<BiblioDb>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
