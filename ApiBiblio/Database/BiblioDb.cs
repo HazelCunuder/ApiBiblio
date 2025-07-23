@@ -1,5 +1,6 @@
 ﻿using ApiBiblio.Models;
 using Microsoft.EntityFrameworkCore;
+using ApiBiblio.DTOs;
 
 namespace ApiBiblio.Database
 {
@@ -38,5 +39,6 @@ namespace ApiBiblio.Database
                 .HasKey(ca => new { ca.IdLivre, ca.IdGenre });
 
         }
+        public DbSet<ApiBiblio.DTOs.CategorieDTO> CategorieDTO { get; set; } = default!;
     }
 }
