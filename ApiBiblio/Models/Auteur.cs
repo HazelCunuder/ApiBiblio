@@ -3,7 +3,7 @@
     public class Auteur
     {
         public int Id { get; set; }
-        public required string NomAuteur { get; set; }
-        public required string PrenomAuteur { get; set; }
+        public string? NomAuteur { get; set; }
+        public string? PrenomAuteur { get; set; }
     }
 }

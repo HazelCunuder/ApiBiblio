@@ -16,7 +16,7 @@ namespace ApiBiblio.DTOs
         public int IdCategorie { get; set; }
 
         public LivreDTO() { }
-        public LivreDTO(Livre Livre) =>
-            (Id, Titre, Disponible, AnneePublication, ISBN, IdEmprunt, IdCategorie) = (Livre.Id, Livre.Titre, Livre.Disponible, Livre.AnnePublication, Livre.ISBN, Livre.IdEmprunt, Livre.IdCategorie);
+        public LivreDTO(Livre livre) =>
+            (Id, Titre, Disponible, AnneePublication, ISBN, IdEmprunt, IdCategorie) = (livre.Id, livre.Titre, livre.Disponible, livre.AnnePublication, livre.ISBN, livre.IdEmprunt, livre.IdCategorie);
     }
 }
