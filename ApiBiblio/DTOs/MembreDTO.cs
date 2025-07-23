@@ -5,11 +5,11 @@ namespace ApiBiblio.DTOs
     public class MembreDTO
     {
         public int Id { get; set; }
-        public string? NomMembre { get; set; }
-        public string? PrenomMembre { get; set; }
-        public string? MdpMembre { get; set; }
-        public string? AdressePostale { get; set; }
-        public string? AdresseMail { get; set; }
+        public required string NomMembre { get; set; }
+        public required string PrenomMembre { get; set; }
+        public required string MdpMembre { get; set; }
+        public string AdressePostale { get; set; }
+        public required string AdresseMail { get; set; }
         public string? Telephone { get; set; }
 
         public List<string> HistoriqueMembre { get; set; } = new();
