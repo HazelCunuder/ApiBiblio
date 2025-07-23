@@ -3,12 +3,12 @@
     public class Membre
     {
         public int Id { get; set; }
-        public string? nom_Membre{ get; set; }
-        public string? prenom_Membre { get; set; }
-        public string? mdp_Membre { get; set; }
-        public string? adresse_postale {  get; set; }
-        public string? adresse_mail { get; set; }
-        public string? telephone {  get; set; }
-        public string? historique_Membre { get; set; }
+        public string? Nom_Membre{ get; set; }
+        public string? Prenom_Membre { get; set; }
+        public string? Mdp_Membre { get; set; }
+        public string? Adresse_postale {  get; set; }
+        public string? Adresse_mail { get; set; }
+        public string? Telephone {  get; set; }
+        public string? Historique_Membre { get; set; }
     }
 }
