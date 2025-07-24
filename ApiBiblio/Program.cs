@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using ApiBiblio.Database;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace ApiBiblio
 {
@@ -9,27 +10,50 @@ namespace ApiBiblio
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddDbContextPool<BiblioDb>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Add services
+            builder.Services.AddDbContextPool<BiblioDb>(opt =>
+                opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "BiblioSimplon",
+                    Version = "v1",
+                    Description = "Une Api pour gérer une bibliothèque",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "BiblioSimplon",
+                        Email = "test.email@gmail.com"
+                    }
+                });
+            });
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Middleware
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BiblioSimplon V1");
+                c.RoutePrefix = "swagger";
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthorization();
+            
 
             app.MapControllerRoute(
                 name: "default",

@@ -66,6 +66,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
