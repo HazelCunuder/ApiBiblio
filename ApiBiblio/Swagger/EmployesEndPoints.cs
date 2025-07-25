@@ -7,52 +7,52 @@ namespace ApiBiblio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenresEndPoints : ControllerBase
+    public class EmployesEndPoints : ControllerBase
     {
         private readonly BiblioDb _context;
 
-        public GenresEndPoints(BiblioDb context)
+        public EmployesEndPoints(BiblioDb context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetGenres()
+        public async Task<ActionResult<IEnumerable<Employe>>> GetEmploye()
         {
-            return await _context.Genres.ToListAsync();
+            return await _context.Employes.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Genre>> GetGenre(int id)
+        public async Task<ActionResult<Employe>> GetEmploye(int id)
         {
-            var genre = await _context.Genres.FindAsync(id);
+            var employe = await _context.Employes.FindAsync(id);
 
-            if (genre == null)
+            if (employe == null)
             {
                 return NotFound();
             }
 
-            return genre;
+            return employe;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Genre>> PostGenre(Genre genre)
+        public async Task<ActionResult<Employe>> PostEmploye(Employe employe)
         {
-            _context.Genres.Add(genre);
+            _context.Employes.Add(employe);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetGenre), new { id = genre.Id }, genre);
+            return CreatedAtAction(nameof(GetEmploye), new { id = employe.Id }, employe);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGenre(int id, Genre genre)
+        public async Task<IActionResult> PutEmploye(int id, Employe employe)
         {
-            if (id != genre.Id)
+            if (id != employe.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(genre).State = EntityState.Modified;
+            _context.Entry(employe).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace ApiBiblio.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Genres.Any(e => e.Id == id))
+                if (!_context.Employes.Any(e => e.Id == id))
                 {
                     return NotFound();
                 }
@@ -71,18 +71,19 @@ namespace ApiBiblio.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGenre(int id)
+        public async Task<IActionResult> DeleteEmploye(int id)
         {
-            var genre = await _context.Genres.FindAsync(id);
-            if (genre == null)
+            var employe = await _context.Employes.FindAsync(id);
+            if (employe == null)
             {
                 return NotFound();
             }
 
-            _context.Genres.Remove(genre);
+            _context.Employes.Remove(employe);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
     }
 }
+

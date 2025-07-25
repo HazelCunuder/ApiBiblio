@@ -6,9 +6,9 @@
         public required string NomMembre{ get; set; }
         public required string PrenomMembre { get; set; }
         public required string MdpMembre { get; set; }
-        public string? AdressePostale {  get; set; }
+        public required string AdressePostale {  get; set; }
         public  required string AdresseMail { get; set; }
-        public string? Telephone {  get; set; }
-        public List<string> HistoriqueMembre { get; set; } = new();
+        public required string Telephone {  get; set; }
+        public List<string>? HistoriqueMembre { get; set; } = new();
     }
 }

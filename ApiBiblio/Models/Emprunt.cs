@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public DateOnly DateEmprunt { get; set; }
-        public bool Statut {  get; set; }
+        public required bool Statut {  get; set; }
         public DateOnly DateRetour { get; set; }
         public int MembreId { get; set; }
     }
