@@ -30,7 +30,9 @@ namespace ApiBiblio
                         Email = "test.email@gmail.com"
                     }
                 });
+                c.EnableAnnotations();
             });
+           
 
             var app = builder.Build();
 

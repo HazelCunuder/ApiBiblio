@@ -2,6 +2,8 @@
 using ApiBiblio.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
+
 
 namespace ApiBiblio.Controllers
 {
@@ -10,7 +12,6 @@ namespace ApiBiblio.Controllers
     public class MembreEndPoints : ControllerBase
     {
         private readonly BiblioDb _context;
-
         public MembreEndPoints(BiblioDb context)
         {
             _context = context;
@@ -18,13 +19,18 @@ namespace ApiBiblio.Controllers
 
         // GET: api/MembresEndPoints
         [HttpGet]
+        [SwaggerOperation(Summary = "Liste tous les membres", Description = "Récupère la liste complète des membres.")]
+        [SwaggerResponse(200, "Succès", typeof(IEnumerable<Membre>))]
         public async Task<ActionResult<IEnumerable<Membre>>> GetMembre()
         {
             return await _context.Membres.ToListAsync();
         }
-
+    
         // GET: api/MembresEndPoints/5
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Récupère un membre", Description = "Récupère un membre à partir de son identifiant.")]
+        [SwaggerResponse(200, "Membre trouvé", typeof(Membre))]
+        [SwaggerResponse(404, "Membre non trouvé")]
         public async Task<ActionResult<Membre>> GetMembre(int id)
         {
             var membre = await _context.Membres.FindAsync(id);
@@ -39,6 +45,8 @@ namespace ApiBiblio.Controllers
 
         // POST: api/MembresEndPoints
         [HttpPost]
+        [SwaggerOperation(Summary = "Ajoute un membre", Description = "Ajoute un nouveau membre à la base de données.")]
+        [SwaggerResponse(201, "Membre créé", typeof(Membre))]
         public async Task<ActionResult<Membre>> PostMembre(Membre membre)
         {
             _context.Membres.Add(membre);
@@ -49,6 +57,9 @@ namespace ApiBiblio.Controllers
 
         // PUT: api/MembresEndPoints/5
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Modifie un membre", Description = "Met à jour les informations d’un membre existant.")]
+        [SwaggerResponse(204, "Membre mis à jour")]
+        [SwaggerResponse(400, "ID incohérent")]
         public async Task<IActionResult> PutMembre(int id, Membre membre)
         {
             if (id != membre.Id)
@@ -63,6 +74,9 @@ namespace ApiBiblio.Controllers
 
         // DELETE: api/MembresEndPoints/5
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Supprime un membre", Description = "Supprime un membre par son identifiant.")]
+        [SwaggerResponse(204, "Membre supprimé")]
+        [SwaggerResponse(404, "Membre non trouvé")]
         public async Task<IActionResult> DeleteMembre(int id)
         {
             var membre = await _context.Membres.FindAsync(id);
