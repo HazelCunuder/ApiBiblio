@@ -8,6 +8,5 @@
         public int AnnePublication { get; set; }
         public string? ISBN { get; set; }
         public int IdCategorie { get; set; }
-        public int IdEmprunt { get; set; }
     }
 }

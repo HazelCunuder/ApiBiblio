@@ -6,6 +6,6 @@
         public DateOnly DateEmprunt { get; set; }
         public required bool Statut {  get; set; }
         public DateOnly DateRetour { get; set; }
-        public int MembreId { get; set; }
+        public int IdMembre { get; set; }
     }
 }
