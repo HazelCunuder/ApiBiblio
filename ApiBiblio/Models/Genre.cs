@@ -6,7 +6,7 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
         [Required]
         [StringLength(30)]
         public required string NomGenre { get; set; }

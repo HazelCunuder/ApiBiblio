@@ -6,12 +6,14 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
-        [StringLength(200)]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
+        [Required]
+        [StringLength(150)]
         public string? NomAuteur { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
-        [StringLength(200)]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
+        [Required]
+        [StringLength(150)]
         public string? PrenomAuteur { get; set; }
     }
 }
