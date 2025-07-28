@@ -45,3 +45,34 @@ namespace ApiBiblio.Swagger
             return CreatedAtAction(nameof(GetEmprunt), new { id = emprunt.Id }, emprunt);
         }
 
+        // PUT: api/EmpruntsEndPoints/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutEmprunt(int id, Emprunt emprunt)
+        {
+            if (id != emprunt.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(emprunt).State = EntityState.Modified;
+
+            return NoContent();
+        }
+
+        // DELETE: api/MembresEndPoints/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmprunt(int id)
+        {
+            var emprunt = await _context.Emprunts.FindAsync(id);
+            if (emprunt == null)
+            {
+                return NotFound();
+            }
+
+            _context.Emprunts.Remove(emprunt);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
