@@ -2,9 +2,12 @@
 using ApiBiblio.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ApiBiblio.Swagger
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EmpruntEndPoints : ControllerBase
     {
         private readonly BiblioDb _context;
@@ -14,15 +17,20 @@ namespace ApiBiblio.Swagger
             _context = context;
         }
 
-        // GET: api/EmpruntsEndPoints
+        // GET: api/EmpruntEndPoints
         [HttpGet]
+        [SwaggerOperation(Summary = "Liste tous les emprunts", Description = "Récupère tous les emprunts enregistrés dans la base de données.")]
+        [SwaggerResponse(200, "Liste des emprunts", typeof(IEnumerable<Emprunt>))]
         public async Task<ActionResult<IEnumerable<Emprunt>>> GetEmprunt()
         {
             return await _context.Emprunts.ToListAsync();
         }
 
-        // GET: api/EmpruntsEndPoints/5
+        // GET: api/EmpruntEndPoints/id
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Récupère un emprunt", Description = "Récupère les détails d’un emprunt par son identifiant.")]
+        [SwaggerResponse(200, "Emprunt trouvé", typeof(Emprunt))]
+        [SwaggerResponse(404, "Emprunt non trouvé")]
         public async Task<ActionResult<Emprunt>> GetEmprunt(int id)
         {
             var emprunt = await _context.Emprunts.FindAsync(id);
@@ -35,8 +43,10 @@ namespace ApiBiblio.Swagger
             return emprunt;
         }
 
-        // POST: api/EmpruntsEndPoints
+        // POST: api/EmpruntEndPoints
         [HttpPost]
+        [SwaggerOperation(Summary = "Ajoute un emprunt", Description = "Crée un nouvel emprunt.")]
+        [SwaggerResponse(201, "Emprunt créé", typeof(Emprunt))]
         public async Task<ActionResult<Emprunt>> PostEmprunt(Emprunt emprunt)
         {
             _context.Emprunts.Add(emprunt);
@@ -45,8 +55,11 @@ namespace ApiBiblio.Swagger
             return CreatedAtAction(nameof(GetEmprunt), new { id = emprunt.Id }, emprunt);
         }
 
-        // PUT: api/EmpruntsEndPoints/5
+        // PUT: api/EmpruntEndPoints/id
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Modifie un emprunt", Description = "Met à jour les informations d’un emprunt existant.")]
+        [SwaggerResponse(204, "Emprunt modifié")]
+        [SwaggerResponse(400, "ID incohérent")]
         public async Task<IActionResult> PutEmprunt(int id, Emprunt emprunt)
         {
             if (id != emprunt.Id)
@@ -55,12 +68,16 @@ namespace ApiBiblio.Swagger
             }
 
             _context.Entry(emprunt).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // DELETE: api/MembresEndPoints/5
+        // DELETE: api/EmpruntEndPoints/id
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Supprime un emprunt", Description = "Supprime un emprunt par son identifiant.")]
+        [SwaggerResponse(204, "Emprunt supprimé")]
+        [SwaggerResponse(404, "Emprunt non trouvé")]
         public async Task<IActionResult> DeleteEmprunt(int id)
         {
             var emprunt = await _context.Emprunts.FindAsync(id);
@@ -75,4 +92,4 @@ namespace ApiBiblio.Swagger
             return NoContent();
         }
     }
-}
+};
