@@ -7,12 +7,12 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [RegularExpression(@"[A-Z]+[A-zà-ÿ\s'-]+$")]
         [StringLength(200)]
         [Required]
         public required string NomEmploye { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
         [StringLength(200)]
         [Required]
         public required string PrenomEmploye { get; set; }
