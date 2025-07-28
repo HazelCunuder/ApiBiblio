@@ -1,157 +1,146 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiBiblio.Database;
+using ApiBiblio.DTOs;
+using ApiBiblio.Models;
+using ApiBiblio.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ApiBiblio.Database;
-using ApiBiblio.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ApiBiblio.Controllers
 {
-    public class EmpruntsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class EmpruntsController : ControllerBase
     {
-        private readonly BiblioDb _context;
+        private readonly IEmpruntService _empruntService;
+        private readonly IEmployeService _employeService;
 
-        public EmpruntsController(BiblioDb context)
+        public EmpruntsController(IEmpruntService empruntService, IEmployeService employeService)
         {
-            _context = context;
+            _empruntService = empruntService;
+            _employeService = employeService;
         }
 
-        // GET: Emprunts
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<IEnumerable<EmpruntDTO>>> GetAll()
         {
-            return View(await _context.Emprunts.ToListAsync());
-        }
-
-        // GET: Emprunts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var emprunts = await _empruntService.GetAllAsync();
+                return Ok(emprunts);
             }
-
-            var emprunt = await _context.Emprunts
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (emprunt == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-
-            return View(emprunt);
         }
 
-        // GET: Emprunts/Create
-        public IActionResult Create()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EmpruntDTO>> GetById(int id)
         {
-            return View();
+            try
+            {
+                var emprunt = await _empruntService.GetByIdAsync(id);
+                return Ok(emprunt);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // POST: Emprunts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpGet("en-cours")]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<IEnumerable<EmpruntDTO>>> GetEmpruntsEnCours()
+        {
+            try
+            {
+                var emprunts = await _empruntService.GetEmpruntsEnCoursAsync();
+                return Ok(emprunts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("membre/{membreId}")]
+        public async Task<ActionResult<IEnumerable<EmpruntDTO>>> GetByMembre(int membreId)
+        {
+            try
+            {
+                var emprunts = await _empruntService.GetEmpruntsByMembreAsync(membreId);
+                return Ok(emprunts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateEmprunt,Statut,DateRetour,MembreId")] Emprunt emprunt)
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<EmpruntDTO>> Create([FromBody] CreateEmpruntDto createEmpruntDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(emprunt);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Récupérer l'ID de l'employé connecté
+                var email = User.FindFirst(ClaimTypes.Email)?.Value;
+                var employeId = await _employeService.GetEmployeIdAsync(email);
+
+                var emprunt = await _empruntService.CreateAsync(createEmpruntDto, employeId);
+                return CreatedAtAction(nameof(GetById), new { id = emprunt.Id }, emprunt);
             }
-            return View(emprunt);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // GET: Emprunts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPatch("{id}/retour")]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult> RetournerLivres(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                // Récupérer l'ID de l'employé connecté
+                var email = User.FindFirst(ClaimTypes.Email)?.Value;
+                var employeId = await _employeService.GetEmployeIdAsync(email);
 
-            var emprunt = await _context.Emprunts.FindAsync(id);
-            if (emprunt == null)
+                var result = await _empruntService.RetournerLivresAsync(id, employeId);
+                if (result)
+                    return Ok(new { message = "Livres retournés avec succès" });
+
+                return NotFound(new { message = "Emprunt non trouvé" });
+            }
+            catch (InvalidOperationException ex)
             {
-                return NotFound();
+                return Conflict(new { message = ex.Message });
             }
-            return View(emprunt);
-        }
-
-        // POST: Emprunts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateEmprunt,Statut,DateRetour,MembreId")] Emprunt emprunt)
-        {
-            if (id != emprunt.Id)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(emprunt);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpruntExists(emprunt.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(emprunt);
-        }
-
-        // GET: Emprunts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var emprunt = await _context.Emprunts
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (emprunt == null)
-            {
-                return NotFound();
-            }
-
-            return View(emprunt);
-        }
-
-        // POST: Emprunts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var emprunt = await _context.Emprunts.FindAsync(id);
-            if (emprunt != null)
-            {
-                _context.Emprunts.Remove(emprunt);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool EmpruntExists(int id)
-        {
-            return _context.Emprunts.Any(e => e.Id == id);
         }
     }
 }

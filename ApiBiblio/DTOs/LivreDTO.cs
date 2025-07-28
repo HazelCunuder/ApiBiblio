@@ -6,17 +6,35 @@ namespace ApiBiblio.DTOs
 {
     public class LivreDTO
     {
-        public int Id { get; set; }
+        public class LivreDto
+        {
+            public int Id { get; set; }
+            public string Titre { get; set; }
+            public bool Disponible { get; set; }
+            public int AnneePublication { get; set; }
+            public string Isbn { get; set; }
+            public string Categorie { get; set; }
+            public string Auteur { get; set; }
+            public string Genre { get; set; }
+        }
 
-        public required string Titre { get; set; }
-        public bool Disponible { get; set; }
-        public int AnneePublication { get; set; }
-        public string? ISBN { get; set; }
-        public int IdEmprunt { get; set; }
-        public int IdCategorie { get; set; }
+        public class CreateLivreDto
+        {
+            public string Titre { get; set; }
+            public int AnneePublication { get; set; }
+            public string Isbn { get; set; }
+            public int IdCategorie { get; set; }
+            public int IdAuteur { get; set; }
+            public int IdGenre { get; set; }
+        }
 
-        public LivreDTO() { }
-        public LivreDTO(Livre livre) =>
-            (Id, Titre, Disponible, AnneePublication, ISBN, IdEmprunt, IdCategorie) = (livre.Id, livre.Titre, livre.Disponible, livre.AnnePublication, livre.ISBN, livre.IdEmprunt, livre.IdCategorie);
+        public class UpdateLivreDto
+        {
+            public string Titre { get; set; }
+            public int AnneePublication { get; set; }
+            public int IdCategorie { get; set; }
+            public int IdAuteur { get; set; }
+            public int IdGenre { get; set; }
+        }
     }
 }

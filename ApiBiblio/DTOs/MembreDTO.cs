@@ -4,19 +4,33 @@ namespace ApiBiblio.DTOs
 {
     public class MembreDTO
     {
-        public int Id { get; set; }
-        public required string NomMembre { get; set; }
-        public required string PrenomMembre { get; set; }
-        public required string MdpMembre { get; set; }
-        public string AdressePostale { get; set; }
-        public required string AdresseMail { get; set; }
-        public string? Telephone { get; set; }
+        public class MembreDto
+        {
+            public int Id { get; set; }
+            public string NomMembre { get; set; }
+            public string PrenomMembre { get; set; }
+            public string AdresseMail { get; set; }
+            public string Telephone { get; set; }
+            public string AdressePostale { get; set; }
+        }
 
-        public List<string> HistoriqueMembre { get; set; } = new();
+        public class CreateMembreDto
+        {
+            public string NomMembre { get; set; }
+            public string PrenomMembre { get; set; }
+            public string AdresseMail { get; set; }
+            public string MdpMembre { get; set; }
+            public string Telephone { get; set; }
+            public string AdressePostale { get; set; }
+        }
 
-        public MembreDTO() { }
-        public MembreDTO(Membre MembreItem) =>
-
-        (Id, NomMembre, PrenomMembre, Telephone, AdresseMail, MdpMembre, AdressePostale, HistoriqueMembre) = (MembreItem.Id, MembreItem.NomMembre, MembreItem.PrenomMembre, MembreItem.Telephone, MembreItem.AdresseMail, MembreItem.MdpMembre, MembreItem.AdressePostale, MembreItem.HistoriqueMembre);
+        public class UpdateMembreDto
+        {
+            public string NomMembre { get; set; }
+            public string PrenomMembre { get; set; }
+            public string AdresseMail { get; set; }
+            public string Telephone { get; set; }
+            public string AdressePostale { get; set; }
+        }
     }
 }

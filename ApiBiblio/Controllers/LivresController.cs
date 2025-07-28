@@ -1,158 +1,152 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiBiblio.Database;
+using ApiBiblio.Models;
+using ApiBiblio.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ApiBiblio.Database;
-using ApiBiblio.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static ApiBiblio.DTOs.LivreDTO;
 
 namespace ApiBiblio.Controllers
 {
-    public class LivresController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class LivresController : ControllerBase
     {
-        private readonly BiblioDb _context;
+        private readonly ILivreService _livreService;
 
-        public LivresController(BiblioDb context)
+        public LivresController(ILivreService livreService)
         {
-            _context = context;
+            _livreService = livreService;
         }
 
-        // GET: Livres
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Livres.ToListAsync());
-        }
-
-        // GET: Livres/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var livre = await _context.Livres
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (livre == null)
-            {
-                return NotFound();
-            }
-
-            return View(livre);
-        }
-
-        // GET: Livres/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Livres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdEmprunt")] Livre livre)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(livre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(livre);
-        }
-
-        // GET: Livres/Edit/5
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<ActionResult<IEnumerable<LivreDto>>> GetAll()
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var livres = await _livreService.GetAllAsync();
+                return Ok(livres);
             }
-
-            var livre = await _context.Livres.FindAsync(id);
-            if (livre == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-            return View(livre);
         }
 
-        // POST: Livres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LivreDto>> GetById(int id)
+        {
+            try
+            {
+                var livre = await _livreService.GetByIdAsync(id);
+                return Ok(livre);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("disponibles")]
+        public async Task<ActionResult<IEnumerable<LivreDto>>> GetAvailable()
+        {
+            try
+            {
+                var livres = await _livreService.GetAvailableAsync();
+                return Ok(livres);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdEmprunt")] Livre livre)
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<LivreDto>> Create([FromBody] CreateLivreDto createLivreDto)
         {
-            if (id != livre.Id)
+            try
             {
-                return NotFound();
+                var livre = await _livreService.CreateAsync(createLivreDto);
+                return CreatedAtAction(nameof(GetById), new { id = livre.Id }, livre);
             }
-
-            if (ModelState.IsValid)
+            catch (InvalidOperationException ex)
             {
-                try
-                {
-                    _context.Update(livre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LivreExists(livre.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return Conflict(new { message = ex.Message });
             }
-            return View(livre);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // GET: Livres/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<LivreDto>> Update(int id, [FromBody] UpdateLivreDto updateLivreDto)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var livre = await _livreService.UpdateAsync(id, updateLivreDto);
+                return Ok(livre);
             }
-
-            var livre = await _context.Livres
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (livre == null)
+            catch (KeyNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new { message = ex.Message });
             }
-
-            return View(livre);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // POST: Livres/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrateur")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var livre = await _context.Livres.FindAsync(id);
-            if (livre != null)
+            try
             {
-                _context.Livres.Remove(livre);
-            }
+                var result = await _livreService.DeleteAsync(id);
+                if (result)
+                    return NoContent();
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                return NotFound(new { message = "Livre non trouvé" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        private bool LivreExists(int id)
+        [HttpPatch("{id}/disponibilite")]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult> UpdateAvailability(int id, [FromBody] bool disponible)
         {
-            return _context.Livres.Any(e => e.Id == id);
+            try
+            {
+                var result = await _livreService.UpdateAvailabilityAsync(id, disponible);
+                if (result)
+                    return Ok(new { message = "Disponibilité mise à jour" });
+
+                return NotFound(new { message = "Livre non trouvé" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

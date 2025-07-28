@@ -10,5 +10,7 @@
         public  required string AdresseMail { get; set; }
         public required string Telephone {  get; set; }
         public List<string>? HistoriqueMembre { get; set; } = new();
+        public virtual List<Emprunt> Emprunts { get; set; } = new();
+
     }
 }

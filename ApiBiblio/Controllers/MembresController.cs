@@ -1,157 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiBiblio.Database;
+using ApiBiblio.DTOs;
+using ApiBiblio.Models;
+using ApiBiblio.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ApiBiblio.Database;
-using ApiBiblio.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static ApiBiblio.DTOs.MembreDTO;
 
 namespace ApiBiblio.Controllers
 {
-    public class MembresController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class MembresController : ControllerBase
     {
-        private readonly BiblioDb _context;
+        private readonly IMembreService _membreService;
 
-        public MembresController(BiblioDb context)
+        public MembresController(IMembreService membreService)
         {
-            _context = context;
+            _membreService = membreService;
         }
 
-        // GET: Membres
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<IEnumerable<MembreDto>>> GetAll()
         {
-            return View(await _context.Membres.ToListAsync());
-        }
-
-        // GET: Membres/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var membres = await _membreService.GetAllAsync();
+                return Ok(membres);
             }
-
-            var membre = await _context.Membres
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (membre == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-
-            return View(membre);
         }
 
-        // GET: Membres/Create
-        public IActionResult Create()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MembreDto>> GetById(int id)
         {
-            return View();
+            try
+            {
+                var membre = await _membreService.GetByIdAsync(id);
+                return Ok(membre);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // POST: Membres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpGet("{id}/historique")]
+        public async Task<ActionResult<IEnumerable<EmpruntDTO>>> GetHistorique(int id)
+        {
+            try
+            {
+                var historique = await _membreService.GetHistoriqueAsync(id);
+                return Ok(historique);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomMembre,PrenomMembre,MdpMembre,AdressePostale,AdresseMail,Telephone,HistoriqueMembre")] Membre membre)
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<MembreDto>> Create([FromBody] CreateMembreDto createMembreDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(membre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var membre = await _membreService.CreateAsync(createMembreDto);
+                return CreatedAtAction(nameof(GetById), new { id = membre.Id }, membre);
             }
-            return View(membre);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // GET: Membres/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrateur,Bibliothécaire")]
+        public async Task<ActionResult<MembreDto>> Update(int id, [FromBody] UpdateMembreDto updateMembreDto)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var membre = await _membreService.UpdateAsync(id, updateMembreDto);
+                return Ok(membre);
             }
-
-            var membre = await _context.Membres.FindAsync(id);
-            if (membre == null)
+            catch (KeyNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new { message = ex.Message });
             }
-            return View(membre);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // POST: Membres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomMembre,PrenomMembre,MdpMembre,AdressePostale,AdresseMail,Telephone,HistoriqueMembre")] Membre membre)
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrateur")]
+        public async Task<ActionResult> Delete(int id)
         {
-            if (id != membre.Id)
+            try
             {
-                return NotFound();
-            }
+                var result = await _membreService.DeleteAsync(id);
+                if (result)
+                    return NoContent();
 
-            if (ModelState.IsValid)
+                return NotFound(new { message = "Membre non trouvé" });
+            }
+            catch (InvalidOperationException ex)
             {
-                try
-                {
-                    _context.Update(membre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MembreExists(membre.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return Conflict(new { message = ex.Message });
             }
-            return View(membre);
-        }
-
-        // GET: Membres/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(new { message = ex.Message });
             }
-
-            var membre = await _context.Membres
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (membre == null)
-            {
-                return NotFound();
-            }
-
-            return View(membre);
-        }
-
-        // POST: Membres/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var membre = await _context.Membres.FindAsync(id);
-            if (membre != null)
-            {
-                _context.Membres.Remove(membre);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool MembreExists(int id)
-        {
-            return _context.Membres.Any(e => e.Id == id);
         }
     }
 }

@@ -5,14 +5,19 @@ namespace ApiBiblio.DTOs
     public class EmpruntDTO
     {
         public int Id { get; set; }
-        public DateOnly DateEmprunt { get; set; }
-        public bool Statut { get; set; }
-        public DateOnly DateRetour { get; set; }
-        public int MembreId { get; set; }
+        public DateTime DateEmprunt { get; set; }
+        public string Statut { get; set; }
+        public DateTime DateRetour { get; set; }
+        public string Membre { get; set; }
+        public string Employe { get; set; }
+        public List<string> Livres { get; set; } = new List<string>();
+    }
 
-        public EmpruntDTO() { }
-        public EmpruntDTO(Emprunt EmpruntItem) =>
-
-            (Id, DateEmprunt, DateRetour, MembreId) = (EmpruntItem.Id, EmpruntItem.DateRetour, EmpruntItem.DateEmprunt, EmpruntItem.MembreId);
+    public class CreateEmpruntDto
+    {
+        public int Id { get; set; }
+        public List<int> IdLivres { get; set; } = new List<int>();
+        public DateTime DateRetour { get; set; }
     }
 }
+

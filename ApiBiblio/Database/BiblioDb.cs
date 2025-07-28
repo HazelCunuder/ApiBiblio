@@ -16,11 +16,41 @@ namespace ApiBiblio.Database
         public DbSet<Categorie> Categories => Set<Categorie>();
         public DbSet<Genre> Genres => Set<Genre>();
         public DbSet<Emprunt> Emprunts => Set<Emprunt>();
+        public DbSet<EmpruntLivre> EmpruntLivres { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Permet de créer les tables d'associations
             base.OnModelCreating(modelBuilder);
+
+            // Configuration de la table de liaison EmpruntLivre
+            modelBuilder.Entity<EmpruntLivre>()
+                .HasKey(el => new { el.IdEmprunt, el.IdLivre });
+
+            modelBuilder.Entity<EmpruntLivre>()
+                .HasOne(el => el.Emprunt)
+                .WithMany(e => e.EmpruntLivres)
+                .HasForeignKey(el => el.IdEmprunt);
+
+            modelBuilder.Entity<EmpruntLivre>()
+                .HasOne(el => el.Livre)
+                .WithMany(l => l.EmpruntLivres)
+                .HasForeignKey(el => el.IdLivre);
+
+            // Index unique pour l'ISBN
+            modelBuilder.Entity<Livre>()
+                .HasIndex(l => l.ISBN)
+                .IsUnique();
+
+            // Index unique pour l'email de l'employé
+            modelBuilder.Entity<Employe>()
+                .HasIndex(e => e.LoginEmploye)
+                .IsUnique();
+
+            // Index unique pour l'email du membre
+            modelBuilder.Entity<Membre>()
+                .HasIndex(m => m.AdresseMail)
+                .IsUnique();
 
             // Définir une clé primaire composite sur Assigner Role
             modelBuilder.Entity<AssignerRole>()
@@ -38,6 +68,10 @@ namespace ApiBiblio.Database
             modelBuilder.Entity<Livre_Genre>()
                 .HasKey(ca => new { ca.IdLivre, ca.IdGenre });
 
+            // Seed data pour les rôles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, NomRole = "Administrateur" },
+                new Role { Id = 2, NomRole = "Bibliothécaire" });
         }
         public DbSet<ApiBiblio.DTOs.CategorieDTO> CategorieDTO { get; set; } = default!;
         public DbSet<ApiBiblio.Models.Employe_Emprunt> Employe_Emprunt { get; set; } = default!;

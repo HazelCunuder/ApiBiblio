@@ -1,65 +1,106 @@
-﻿@model IEnumerable<ApiBiblio.Models.Livre>
-
+﻿@model IEnumerable<ApiBiblio.DTOs.LivreDTO.LivreDto>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestion des livres";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des livres</h2>
+    @if (User.IsInRole("Administrateur") || User.IsInRole("Bibliothécaire"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Ajouter un livre</a>
+    }
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Disponible)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnnePublication)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ISBN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdCategorie)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdEmprunt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Disponible)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnnePublication)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ISBN)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdCategorie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdEmprunt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" class="form-control" id="searchInput" placeholder="Rechercher un livre...">
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" id="filterDisponibilite">
+            <option value="">Tous les livres</option>
+            <option value="true">Disponibles uniquement</option>
+            <option value="false">Empruntés uniquement</option>
+        </select>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped" id="livresTable">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Genre</th>
+                        <th>Catégorie</th>
+                        <th>ISBN</th>
+                        <th>Année</th>
+                        <th>Disponibilité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var livre in Model)
+                    {
+                        <tr data-disponible="@livre.Disponible.ToString().ToLower()">
+                            <td>@livre.Titre</td>
+                            <td>@livre.Auteur</td>
+                            <td>@livre.Genre</td>
+                            <td>@livre.Categorie</td>
+                            <td>@livre.Isbn</td>
+                            <td>@livre.AnneePublication</td>
+                            <td>
+                                <span class="badge bg-@(livre.Disponible ? "success" : "danger")">
+                                    @(livre.Disponible ? "Disponible" : "Emprunté")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Details" asp-route-id="@livre.Id" class="btn btn-sm btn-outline-info">Détails</a>
+                                    @if (User.IsInRole("Administrateur") || User.IsInRole("Bibliothécaire"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@livre.Id" class="btn btn-sm btn-outline-warning">Modifier</a>
+                                    }
+                                    @if (User.IsInRole("Administrateur"))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@livre.Id" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const filterSelect = document.getElementById('filterDisponibilite');
+            const table = document.getElementById('livresTable');
+            const rows = table.querySelectorAll('tbody tr');
+
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const disponibiliteFilter = filterSelect.value;
+
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const disponible = row.getAttribute('data-disponible');
+
+                    const matchesSearch = text.includes(searchTerm);
+                    const matchesFilter = disponibiliteFilter === '' || disponible === disponibiliteFilter;
+
+                    row.style.display = matchesSearch && matchesFilter ? '' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterTable);
+            filterSelect.addEventListener('change', filterTable);
+        });
+    </script>
 }
-    </tbody>
-</table>
