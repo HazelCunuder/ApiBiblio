@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ApiBiblio.Database;
 using ApiBiblio.Models;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ApiBiblio.Controllers
 {
@@ -18,13 +19,18 @@ namespace ApiBiblio.Controllers
 
         // GET: api/CategoriesEndPoints
         [HttpGet]
+        [SwaggerOperation(Summary = "Récupère la liste de toutes les catégories")]
+        [SwaggerResponse(200, "Succès", typeof(IEnumerable<Categorie>))]
         public async Task<ActionResult<IEnumerable<Categorie>>> GetCategories()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        // GET: api/CategoriesEndPoints/5
+        // GET: api/CategoriesEndPoints/id
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Récupère une catégorie par son ID")]
+        [SwaggerResponse(200, "Succès", typeof(Categorie))]
+        [SwaggerResponse(404, "Catégorie non trouvée")]
         public async Task<ActionResult<Categorie>> GetCategorie(int id)
         {
             var categorie = await _context.Categories.FindAsync(id);
@@ -39,6 +45,8 @@ namespace ApiBiblio.Controllers
 
         // POST: api/CategoriesEndPoints
         [HttpPost]
+        [SwaggerOperation(Summary = "Crée une nouvelle catégorie")]
+        [SwaggerResponse(201, "Catégorie créée avec succès", typeof(Categorie))]
         public async Task<ActionResult<Categorie>> PostCategorie(Categorie categorie)
         {
             _context.Categories.Add(categorie);
@@ -49,6 +57,10 @@ namespace ApiBiblio.Controllers
 
         // PUT: api/CategoriesEndPoints/5
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Met à jour une catégorie existante")]
+        [SwaggerResponse(204, "Mise à jour réussie")]
+        [SwaggerResponse(400, "Mauvaise requête")]
+        [SwaggerResponse(404, "Catégorie non trouvée")]
         public async Task<IActionResult> PutCategorie(int id, Categorie categorie)
         {
             if (id != categorie.Id)
@@ -76,6 +88,9 @@ namespace ApiBiblio.Controllers
 
         // DELETE: api/CategoriesEndPoints/5
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Supprime une catégorie")]
+        [SwaggerResponse(204, "Suppression réussie")]
+        [SwaggerResponse(404, "Catégorie non trouvée")]
         public async Task<IActionResult> DeleteCategorie(int id)
         {
             var categorie = await _context.Categories.FindAsync(id);
