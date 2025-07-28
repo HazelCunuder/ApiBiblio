@@ -6,9 +6,22 @@ namespace ApiBiblio.Models
     public class Employe
     {
         public int Id { get; set; }
+
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [StringLength(200)]
+        [Required]
         public required string NomEmploye { get; set; }
+
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
+        [StringLength(200)]
+        [Required]
         public required string PrenomEmploye { get; set; }
+
+        [Required]
         public required string LoginEmploye { get; set; } // Identifiant utilisé pour se connecter
+
+        [Required]
+        [StringLength(16, MinimumLength = 8)]
         public required string MdpEmploye { get; set; } 
     }
 }
