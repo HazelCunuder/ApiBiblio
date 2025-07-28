@@ -2,6 +2,7 @@
 using ApiBiblio.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ApiBiblio.Controllers
 {
@@ -17,12 +18,17 @@ namespace ApiBiblio.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Récupère la liste de tous les employés", Description = "Retourne une liste complète des employés.")]
+        [SwaggerResponse(200, "Succès", typeof(IEnumerable<Employe>))]
         public async Task<ActionResult<IEnumerable<Employe>>> GetEmploye()
         {
             return await _context.Employes.ToListAsync();
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Récupère un employé par son ID", Description = "Retourne l'employé correspondant à l'ID fourni.")]
+        [SwaggerResponse(200, "Succès", typeof(Employe))]
+        [SwaggerResponse(404, "Employé non trouvé")]
         public async Task<ActionResult<Employe>> GetEmploye(int id)
         {
             var employe = await _context.Employes.FindAsync(id);
@@ -36,6 +42,8 @@ namespace ApiBiblio.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Crée un nouvel employé", Description = "Ajoute un employé à la base de données.")]
+        [SwaggerResponse(201, "Employé créé avec succès", typeof(Employe))]
         public async Task<ActionResult<Employe>> PostEmploye(Employe employe)
         {
             _context.Employes.Add(employe);
@@ -45,6 +53,10 @@ namespace ApiBiblio.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Met à jour un employé existant", Description = "Met à jour les informations d'un employé.")]
+        [SwaggerResponse(204, "Mise à jour réussie")]
+        [SwaggerResponse(400, "Mauvaise requête")]
+        [SwaggerResponse(404, "Employé non trouvé")]
         public async Task<IActionResult> PutEmploye(int id, Employe employe)
         {
             if (id != employe.Id)
@@ -71,6 +83,9 @@ namespace ApiBiblio.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Supprime un employé", Description = "Supprime un employé selon l'ID fourni.")]
+        [SwaggerResponse(204, "Suppression réussie")]
+        [SwaggerResponse(404, "Employé non trouvé")]
         public async Task<IActionResult> DeleteEmploye(int id)
         {
             var employe = await _context.Employes.FindAsync(id);
