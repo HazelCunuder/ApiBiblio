@@ -54,7 +54,7 @@ namespace ApiBiblio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateEmprunt,Statut,DateRetour,MembreId")] Emprunt emprunt)
+        public async Task<IActionResult> Create([Bind("Id,DateEmprunt,Statut,DateRetour,IdMembre")] Emprunt emprunt)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace ApiBiblio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateEmprunt,Statut,DateRetour,MembreId")] Emprunt emprunt)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DateEmprunt,Statut,DateRetour,IdMembre")] Emprunt emprunt)
         {
             if (id != emprunt.Id)
             {

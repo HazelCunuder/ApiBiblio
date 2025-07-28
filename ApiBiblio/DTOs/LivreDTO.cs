@@ -12,11 +12,10 @@ namespace ApiBiblio.DTOs
         public bool Disponible { get; set; }
         public int AnneePublication { get; set; }
         public string? ISBN { get; set; }
-        public int IdEmprunt { get; set; }
         public int IdCategorie { get; set; }
 
         public LivreDTO() { }
         public LivreDTO(Livre livre) =>
-            (Id, Titre, Disponible, AnneePublication, ISBN, IdEmprunt, IdCategorie) = (livre.Id, livre.Titre, livre.Disponible, livre.AnnePublication, livre.ISBN, livre.IdEmprunt, livre.IdCategorie);
+            (Id, Titre, Disponible, AnneePublication, ISBN, IdCategorie) = (livre.Id, livre.Titre, livre.Disponible, livre.AnnePublication, livre.ISBN, livre.IdCategorie);
     }
 }

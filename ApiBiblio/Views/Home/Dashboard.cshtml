@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Tableau de bord - Bibliothèque Simplon</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Livres totaux</h5>
+                        <h3 id="totalLivres">-</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-book fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Livres disponibles</h5>
+                        <h3 id="livresDisponibles">-</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Emprunts en cours</h5>
+                        <h3 id="empruntsEnCours">-</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Membres actifs</h5>
+                        <h3 id="membresActifs">-</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Emprunts récents</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="empruntsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Membre</th>
+                                <th>Livres</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Les données seront chargées via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Actions rapides</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/Livres/Create" class="btn btn-primary">Ajouter un livre</a>
+                    <a href="/Membres/Create" class="btn btn-success">Ajouter un membre</a>
+                    <a href="/Emprunts/Create" class="btn btn-warning">Nouvel emprunt</a>
+                    <a href="/Emprunts/Index" class="btn btn-info">Gérer les retours</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            const token = localStorage.getItem('token');
+
+            try {
+                // Charger les statistiques
+                const [livresResponse, empruntsResponse] = await Promise.all([
+                    fetch('/api/livres', { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch('/api/emprunts', { headers: { 'Authorization': `Bearer ${token}` } })
+                ]);
+
+                if (livresResponse.ok && empruntsResponse.ok) {
+                    const livres = await livresResponse.json();
+                    const emprunts = await empruntsResponse.json();
+
+                    // Mettre à jour les statistiques
+                    document.getElementById('totalLivres').textContent = livres.length;
+                    document.getElementById('livresDisponibles').textContent = livres.filter(l => l.disponible).length;
+                    document.getElementById('empruntsEnCours').textContent = emprunts.filter(e => e.statut === 'En cours').length;
+
+                    // Charger les emprunts récents
+                    loadRecentEmprunts(emprunts.slice(0, 5));
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+            }
+        }
+
+        function loadRecentEmprunts(emprunts) {
+            const tbody = document.querySelector('#empruntsTable tbody');
+            tbody.innerHTML = '';
+
+            emprunts.forEach(emprunt => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${new Date(emprunt.date_Emprunt).toLocaleDateString()}</td>
+                    <td>${emprunt.membre}</td>
+                    <td>${emprunt.livres.join(', ')}</td>
+                    <td><span class="badge bg-${emprunt.statut === 'En cours' ? 'warning' : 'success'}">${emprunt.statut}</span></td>
+                `;
+            });
+        }
+    </script>
+}

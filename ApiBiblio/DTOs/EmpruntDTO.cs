@@ -8,11 +8,11 @@ namespace ApiBiblio.DTOs
         public DateOnly DateEmprunt { get; set; }
         public bool Statut { get; set; }
         public DateOnly DateRetour { get; set; }
-        public int MembreId { get; set; }
+        public int IdMembre { get; set; }
 
         public EmpruntDTO() { }
         public EmpruntDTO(Emprunt EmpruntItem) =>
 
-            (Id, DateEmprunt, DateRetour, MembreId) = (EmpruntItem.Id, EmpruntItem.DateRetour, EmpruntItem.DateEmprunt, EmpruntItem.MembreId);
+            (Id, DateEmprunt, DateRetour, IdMembre) = (EmpruntItem.Id, EmpruntItem.DateRetour, EmpruntItem.DateEmprunt, EmpruntItem.IdMembre);
     }
 }
