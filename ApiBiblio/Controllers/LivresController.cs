@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiBiblio.Database;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization; // AJOUT : Pour les droits
 
 namespace ApiBiblio.Controllers
 {
@@ -20,12 +16,14 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres
+        [Authorize] // AJOUT : Lecture accessible à tous les employés connectés
         public async Task<IActionResult> Index()
         {
             return View(await _context.Livres.ToListAsync());
         }
 
         // GET: Livres/Details/5
+        [Authorize] // AJOUT : Lecture accessible à tous les employés connectés
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,16 +42,16 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Create
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue de création
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Livres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut créer
         public async Task<IActionResult> Create([Bind("Id,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdEmprunt")] Livre livre)
         {
             if (ModelState.IsValid)
@@ -66,7 +64,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Edit/5
-        [HttpGet]
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue d'édition
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,10 +81,9 @@ namespace ApiBiblio.Controllers
         }
 
         // POST: Livres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut modifier
         public async Task<IActionResult> Edit(int id, [Bind("Id,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdEmprunt")] Livre livre)
         {
             if (id != livre.Id)
@@ -118,6 +115,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Delete/5
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue de suppression
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +136,7 @@ namespace ApiBiblio.Controllers
         // POST: Livres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut supprimer
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var livre = await _context.Livres.FindAsync(id);
