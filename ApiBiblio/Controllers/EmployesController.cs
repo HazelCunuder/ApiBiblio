@@ -18,7 +18,10 @@ namespace ApiBiblio.Controllers
         // GET: Employes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employes.ToListAsync());
+            var biblioDb = _context.Employes
+                .Include(e => e.Role)
+                .AsNoTracking();
+            return View(await biblioDb.ToListAsync());
         }
 
         // GET: Employes/Details/5
@@ -30,6 +33,7 @@ namespace ApiBiblio.Controllers
             }
 
             var employe = await _context.Employes
+                .Include(e => e.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employe == null)
             {
@@ -42,13 +46,14 @@ namespace ApiBiblio.Controllers
         // GET: Employes/Create
         public IActionResult Create()
         {
+            ViewData["IdRole"] = new SelectList(_context.Roles, "Id", "NomRole");
             return View();
         }
 
         // POST: Employes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye")] Employe employe)
+        public async Task<IActionResult> Create([Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye,IdRole")] Employe employe)
         {
             if (ModelState.IsValid)
             {
@@ -60,6 +65,7 @@ namespace ApiBiblio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdRole"] = new SelectList(_context.Roles, "Id", "NomRole", employe.IdRole);
             return View(employe);
         }
 
@@ -76,13 +82,14 @@ namespace ApiBiblio.Controllers
             {
                 return NotFound();
             }
+            ViewData["IdRole"] = new SelectList(_context.Roles, "Id", "NomRole", employe.IdRole);
             return View(employe);
         }
 
         // POST: Employes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye")] Employe employe)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye,IdRole")] Employe employe)
         {
             if (id != employe.Id)
             {
@@ -113,6 +120,7 @@ namespace ApiBiblio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdRole"] = new SelectList(_context.Roles, "Id", "NomRole", employe.IdRole);
             return View(employe);
         }
 
@@ -125,6 +133,7 @@ namespace ApiBiblio.Controllers
             }
 
             var employe = await _context.Employes
+                .Include(e => e.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employe == null)
             {

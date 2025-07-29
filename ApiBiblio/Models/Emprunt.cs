@@ -21,5 +21,14 @@ namespace ApiBiblio.Models
 
         [DisplayName("Id de l'emprunteur")]
         public int IdMembre { get; set; }
+
+        [ForeignKey("IdMembre")]
+        public Membre? Membre { get; set; }
+
+        [DisplayName("Id du livre")]
+        public int IdLivre { get; set; }
+
+        [ForeignKey("IdLivre")]
+        public Livre? Livre { get; set; }
     }
 }

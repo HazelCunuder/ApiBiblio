@@ -22,7 +22,8 @@ namespace ApiBiblio.Controllers
         // GET: Livre_Auteur
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Livre_Auteur.ToListAsync());
+            var biblioDb = _context.Livre_Auteur.Include(l => l.Auteur).Include(l => l.Livre);
+            return View(await biblioDb.ToListAsync());
         }
 
         // GET: Livre_Auteur/Details/5
@@ -34,6 +35,8 @@ namespace ApiBiblio.Controllers
             }
 
             var livre_Auteur = await _context.Livre_Auteur
+                .Include(l => l.Auteur)
+                .Include(l => l.Livre)
                 .FirstOrDefaultAsync(m => m.IdLivre == id);
             if (livre_Auteur == null)
             {
@@ -46,6 +49,8 @@ namespace ApiBiblio.Controllers
         // GET: Livre_Auteur/Create
         public IActionResult Create()
         {
+            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur");
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre");
             return View();
         }
 
@@ -62,6 +67,8 @@ namespace ApiBiblio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre_Auteur.IdAuteur);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Auteur.IdLivre);
             return View(livre_Auteur);
         }
 
@@ -78,6 +85,8 @@ namespace ApiBiblio.Controllers
             {
                 return NotFound();
             }
+            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre_Auteur.IdAuteur);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Auteur.IdLivre);
             return View(livre_Auteur);
         }
 
@@ -113,6 +122,8 @@ namespace ApiBiblio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre_Auteur.IdAuteur);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Auteur.IdLivre);
             return View(livre_Auteur);
         }
 
@@ -125,6 +136,8 @@ namespace ApiBiblio.Controllers
             }
 
             var livre_Auteur = await _context.Livre_Auteur
+                .Include(l => l.Auteur)
+                .Include(l => l.Livre)
                 .FirstOrDefaultAsync(m => m.IdLivre == id);
             if (livre_Auteur == null)
             {

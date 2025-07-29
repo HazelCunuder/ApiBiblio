@@ -19,26 +19,45 @@ namespace ApiBiblio.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Permet de créer les tables d'associations
             base.OnModelCreating(modelBuilder);
 
-            // Définir une clé primaire composite sur Assigner Role
+            // AssignerRole composite key
             modelBuilder.Entity<AssignerRole>()
                 .HasKey(ca => new { ca.RoleId, ca.EmployeId });
 
-            // Définir une clé primaire composite sur Employe_Emprunt
+            // Employe_Emprunt composite key
             modelBuilder.Entity<Employe_Emprunt>()
                 .HasKey(ca => new { ca.EmpruntId, ca.EmployeId });
 
-            // Définir une clé primaire composite sur Livre - Auteur
+            // Livre_Auteur composite key and relationships
             modelBuilder.Entity<Livre_Auteur>()
                 .HasKey(ca => new { ca.IdLivre, ca.IdAuteur });
 
-            // Définir une clé primaire composite sur Livre - Genre
+            modelBuilder.Entity<Livre_Auteur>()
+                .HasOne(ca => ca.Livre)
+                .WithMany(l => l.Livre_Auteurs)
+                .HasForeignKey(ca => ca.IdLivre);
+
+            modelBuilder.Entity<Livre_Auteur>()
+                .HasOne(ca => ca.Auteur)
+                .WithMany(a => a.Livre_Auteurs)
+                .HasForeignKey(ca => ca.IdAuteur);
+
+            // Livre_Genre composite key and relationships
             modelBuilder.Entity<Livre_Genre>()
                 .HasKey(ca => new { ca.IdLivre, ca.IdGenre });
 
+            modelBuilder.Entity<Livre_Genre>()
+                .HasOne(ca => ca.Livre)
+                .WithMany(l => l.Livre_Genres)
+                .HasForeignKey(ca => ca.IdLivre);
+
+            modelBuilder.Entity<Livre_Genre>()
+                .HasOne(ca => ca.Genre)
+                .WithMany(g => g.Livre_Genres)
+                .HasForeignKey(ca => ca.IdGenre);
         }
+
         public DbSet<ApiBiblio.DTOs.CategorieDTO> CategorieDTO { get; set; } = default!;
         public DbSet<ApiBiblio.Models.Employe_Emprunt> Employe_Emprunt { get; set; } = default!;
         public DbSet<ApiBiblio.Models.Livre_Auteur> Livre_Auteur { get; set; } = default!;

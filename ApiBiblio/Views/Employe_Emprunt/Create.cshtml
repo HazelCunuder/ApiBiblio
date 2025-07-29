@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Create</h1>
@@ -13,14 +14,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="EmpruntId" class="control-label"></label>
-                <input asp-for="EmpruntId" class="form-control" />
-                <span asp-validation-for="EmpruntId" class="text-danger"></span>
+                <label asp-for="EmployeId" class="control-label"></label>
+                <select asp-for="EmployeId" class ="form-control" asp-items="ViewBag.EmployeId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="EmployeId" class="control-label"></label>
-                <input asp-for="EmployeId" class="form-control" />
-                <span asp-validation-for="EmployeId" class="text-danger"></span>
+                <label asp-for="EmpruntId" class="control-label"></label>
+                <select asp-for="EmpruntId" class ="form-control" asp-items="ViewBag.EmpruntId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

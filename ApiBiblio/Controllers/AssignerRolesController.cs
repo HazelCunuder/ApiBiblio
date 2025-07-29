@@ -22,7 +22,11 @@ namespace ApiBiblio.Controllers
         // GET: AssignerRoles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AssignerRole.ToListAsync());
+            var biblioDb = _context.AssignerRole
+                .Include(a => a.Employe)
+                .Include(a => a.Role)
+                .AsNoTracking();
+            return View(await biblioDb.ToListAsync());
         }
 
         // GET: AssignerRoles/Details/5
@@ -34,6 +38,8 @@ namespace ApiBiblio.Controllers
             }
 
             var assignerRole = await _context.AssignerRole
+                .Include(a => a.Employe)
+                .Include(a => a.Role)
                 .FirstOrDefaultAsync(m => m.RoleId == id);
             if (assignerRole == null)
             {
@@ -46,6 +52,8 @@ namespace ApiBiblio.Controllers
         // GET: AssignerRoles/Create
         public IActionResult Create()
         {
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
             return View();
         }
 
@@ -62,6 +70,8 @@ namespace ApiBiblio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", assignerRole.EmployeId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", assignerRole.RoleId);
             return View(assignerRole);
         }
 
@@ -78,6 +88,8 @@ namespace ApiBiblio.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", assignerRole.EmployeId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", assignerRole.RoleId);
             return View(assignerRole);
         }
 
@@ -113,6 +125,8 @@ namespace ApiBiblio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", assignerRole.EmployeId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", assignerRole.RoleId);
             return View(assignerRole);
         }
 
@@ -125,6 +139,8 @@ namespace ApiBiblio.Controllers
             }
 
             var assignerRole = await _context.AssignerRole
+                .Include(a => a.Employe)
+                .Include(a => a.Role)
                 .FirstOrDefaultAsync(m => m.RoleId == id);
             if (assignerRole == null)
             {

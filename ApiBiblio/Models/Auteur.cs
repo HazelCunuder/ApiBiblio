@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ApiBiblio.Models
@@ -18,5 +19,7 @@ namespace ApiBiblio.Models
         [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(150)]
         public string? PrenomAuteur { get; set; }
+
+        public ICollection<Livre_Auteur> Livre_Auteurs { get; set; } = new List<Livre_Auteur>();
     }
 }

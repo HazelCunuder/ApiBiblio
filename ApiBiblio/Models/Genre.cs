@@ -12,5 +12,7 @@ namespace ApiBiblio.Models
         [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(30)]
         public required string NomGenre { get; set; }
+
+        public ICollection<Livre_Genre> Livre_Genres { get; set; } = new List<Livre_Genre>();
     }
 }

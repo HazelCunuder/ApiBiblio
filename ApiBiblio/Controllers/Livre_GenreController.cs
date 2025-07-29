@@ -22,7 +22,8 @@ namespace ApiBiblio.Controllers
         // GET: Livre_Genre
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Livre_Genre.ToListAsync());
+            var biblioDb = _context.Livre_Genre.Include(l => l.Genre).Include(l => l.Livre);
+            return View(await biblioDb.ToListAsync());
         }
 
         // GET: Livre_Genre/Details/5
@@ -34,6 +35,8 @@ namespace ApiBiblio.Controllers
             }
 
             var livre_Genre = await _context.Livre_Genre
+                .Include(l => l.Genre)
+                .Include(l => l.Livre)
                 .FirstOrDefaultAsync(m => m.IdLivre == id);
             if (livre_Genre == null)
             {
@@ -46,6 +49,8 @@ namespace ApiBiblio.Controllers
         // GET: Livre_Genre/Create
         public IActionResult Create()
         {
+            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre");
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre");
             return View();
         }
 
@@ -62,6 +67,8 @@ namespace ApiBiblio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre_Genre.IdGenre);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Genre.IdLivre);
             return View(livre_Genre);
         }
 
@@ -78,6 +85,8 @@ namespace ApiBiblio.Controllers
             {
                 return NotFound();
             }
+            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre_Genre.IdGenre);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Genre.IdLivre);
             return View(livre_Genre);
         }
 
@@ -113,6 +122,8 @@ namespace ApiBiblio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre_Genre.IdGenre);
+            ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", livre_Genre.IdLivre);
             return View(livre_Genre);
         }
 
@@ -125,6 +136,8 @@ namespace ApiBiblio.Controllers
             }
 
             var livre_Genre = await _context.Livre_Genre
+                .Include(l => l.Genre)
+                .Include(l => l.Livre)
                 .FirstOrDefaultAsync(m => m.IdLivre == id);
             if (livre_Genre == null)
             {

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -12,6 +13,12 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Auteur)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Titre)
             </th>
@@ -25,7 +32,10 @@
                 @Html.DisplayNameFor(model => model.ISBN)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdCategorie)
+                @Html.DisplayNameFor(model => model.Categorie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
             </th>
             <th></th>
         </tr>
@@ -33,6 +43,13 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Auteur.NomAuteur)
+                @Html.DisplayFor(modelItem => item.Auteur.PrenomAuteur)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Titre)
             </td>
@@ -46,7 +63,10 @@
                 @Html.DisplayFor(modelItem => item.ISBN)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdCategorie)
+                @Html.DisplayFor(modelItem => item.Categorie.NomCategorie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.NomGenre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

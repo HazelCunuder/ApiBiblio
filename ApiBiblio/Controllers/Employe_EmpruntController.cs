@@ -22,7 +22,8 @@ namespace ApiBiblio.Controllers
         // GET: Employe_Emprunt
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employe_Emprunt.ToListAsync());
+            var biblioDb = _context.Employe_Emprunt.Include(e => e.Employe).Include(e => e.Emprunt);
+            return View(await biblioDb.ToListAsync());
         }
 
         // GET: Employe_Emprunt/Details/5
@@ -34,6 +35,8 @@ namespace ApiBiblio.Controllers
             }
 
             var employe_Emprunt = await _context.Employe_Emprunt
+                .Include(e => e.Employe)
+                .Include(e => e.Emprunt)
                 .FirstOrDefaultAsync(m => m.EmpruntId == id);
             if (employe_Emprunt == null)
             {
@@ -46,6 +49,8 @@ namespace ApiBiblio.Controllers
         // GET: Employe_Emprunt/Create
         public IActionResult Create()
         {
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye");
+            ViewData["EmpruntId"] = new SelectList(_context.Emprunts, "Id", "Id");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace ApiBiblio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmpruntId,EmployeId")] Employe_Emprunt employe_Emprunt)
+        public async Task<IActionResult> Create([Bind("EmployeId,EmpruntId")] Employe_Emprunt employe_Emprunt)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace ApiBiblio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", employe_Emprunt.EmployeId);
+            ViewData["EmpruntId"] = new SelectList(_context.Emprunts, "Id", "Id", employe_Emprunt.EmpruntId);
             return View(employe_Emprunt);
         }
 
@@ -78,6 +85,8 @@ namespace ApiBiblio.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", employe_Emprunt.EmployeId);
+            ViewData["EmpruntId"] = new SelectList(_context.Emprunts, "Id", "Id", employe_Emprunt.EmpruntId);
             return View(employe_Emprunt);
         }
 
@@ -86,7 +95,7 @@ namespace ApiBiblio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpruntId,EmployeId")] Employe_Emprunt employe_Emprunt)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeId,EmpruntId")] Employe_Emprunt employe_Emprunt)
         {
             if (id != employe_Emprunt.EmpruntId)
             {
@@ -113,6 +122,8 @@ namespace ApiBiblio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeId"] = new SelectList(_context.Employes, "Id", "LoginEmploye", employe_Emprunt.EmployeId);
+            ViewData["EmpruntId"] = new SelectList(_context.Emprunts, "Id", "Id", employe_Emprunt.EmpruntId);
             return View(employe_Emprunt);
         }
 
@@ -125,6 +136,8 @@ namespace ApiBiblio.Controllers
             }
 
             var employe_Emprunt = await _context.Employe_Emprunt
+                .Include(e => e.Employe)
+                .Include(e => e.Emprunt)
                 .FirstOrDefaultAsync(m => m.EmpruntId == id);
             if (employe_Emprunt == null)
             {
