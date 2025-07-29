@@ -39,12 +39,20 @@ namespace ApiBiblio.Controllers
             if (result == PasswordVerificationResult.Failed)
                 return Unauthorized("Mot de passe incorrect.");
 
-            // Récupération du rôle de l'employé via la table Assigner
-            var assignation = await _context.Assigner
-                .Include(a => a.Role)
-                .FirstOrDefaultAsync(a => a.IdEmploye == employe.Id);
+            // Récupération du rôle de l'employé via AssignerRole
+            var assignation = await _context.AssignerRole
+                .FirstOrDefaultAsync(a => a.EmployeId == employe.Id);
 
-            string roleName = assignation?.Role?.NomRole ?? "Employe";
+            // On cherche ensuite le nom du rôle correspondant
+            string roleName = "Employe"; // Valeur par défaut si rien trouvé
+            if (assignation != null)
+            {
+                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == assignation.RoleId);
+                if (role != null)
+                {
+                    roleName = role.NomRole;
+                }
+            }
 
             // Création des claims pour le JWT
             var claims = new List<Claim>
