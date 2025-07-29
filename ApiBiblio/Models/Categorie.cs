@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApiBiblio.Models
 {
@@ -6,6 +7,7 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
+        [DisplayName("Catégorie")]
         [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
         [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(30)]
