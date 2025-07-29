@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApiBiblio.Models
 {
@@ -6,30 +7,37 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
-        [Required]
+        [DisplayName("Nom")]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$", ErrorMessage = "Veuillez entrer un nom valide")]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(150)]
         public required string NomMembre{ get; set; }
 
-        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$")]
-        [Required]
+        [DisplayName("Prénom")]
+        [RegularExpression(@"^[A-Z]+[A-zà-ÿ\s'-]+$", ErrorMessage = "Veuillez entrer un prénom valide")]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(150)]
         public required string PrenomMembre { get; set; }
 
-        [Required]
-        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$")]
-        [StringLength(16, MinimumLength = 8)]
+        [DisplayName("Mot de Passe")]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
+        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$", ErrorMessage = "Le mot de passe doit contenir un chiffre, une lettre en Majuscule, une lettre en mininuscule et un caractère spécial")]
+        [StringLength(16, ErrorMessage = "Le mot de passe doit contenir entre 8 et 16 caractères.", MinimumLength = 8)]
         public required string MdpMembre { get; set; }
 
-        [Required]
+        [DisplayName("Adresse")]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         public required string AdressePostale {  get; set; }
 
-        [RegularExpression(@"/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/")]
-        [Required]
+        [DisplayName("Email")]
+        [EmailAddress(ErrorMessage = "Veuillez entrer une adresse email valide")]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         public  required string AdresseMail { get; set; }
 
-        [RegularExpression(@"^(0[1-9])(?:[ .-/]?[0-9]{2}){4}$")]
-        [Required]
+        [DisplayName("Téléphone")]
+        [RegularExpression(@"^(0[1-9])(?:[ .-/]?[0-9]{2}){4}$", ErrorMessage = "Veuillez entrer un numéro de téléphone français valide (ex: 06 12 34 56 78)")]
+        [Phone]
+        [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         public required string Telephone {  get; set; }
         public List<string>? HistoriqueMembre { get; set; } = new();
     }
