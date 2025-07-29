@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Connexion";
+}
+<h2>Connexion</h2>
+@if (ViewBag.Error != null)
+{
+    <div style="color:red;">@ViewBag.Error</div>
+}
+<form asp-action="Login" method="post">
+    <label>Nom d'utilisateur :</label>
+    <input type="text" name="loginEmploye" /><br />
+    <label>Mot de passe :</label>
+    <input type="password" name="mdpEmploye" /><br />
+    <button type="submit">Se connecter</button>
+</form>
+

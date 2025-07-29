@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Créer un Employé";
+}
+<h2>Créer un Employé</h2>
+@if (ViewBag.Error != null)
+{
+    <div style="color:red;">@ViewBag.Error</div>
+}
+@if (ViewBag.Message != null)
+{
+    <div style="color:green;">@ViewBag.Message</div>
+}
+<form asp-action="Create" method="post">
+    <label>Nom :</label>
+    <input type="text" name="nomEmploye" required /><br />
+    <label>Prénom :</label>
+    <input type="text" name="prenomEmploye" required /><br />
+    <label>Login :</label>
+    <input type="text" name="loginEmploye" required /><br />
+    <label>Mot de passe :</label>
+    <input type="password" name="mdpEmploye" required /><br />
+    <button type="submit">Créer</button>
+</form>
