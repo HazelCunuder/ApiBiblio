@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 namespace ApiBiblio
 {
     public class Program
@@ -36,7 +35,25 @@ namespace ApiBiblio
                 });
                 c.EnableAnnotations();
             });
-           
+
+            // === AJOUT : Configuration de l’authentification JWT ===
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
 
             var app = builder.Build();
 
@@ -58,8 +75,8 @@ namespace ApiBiblio
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication(); // AJOUT : Doit être AVANT app.UseAuthorization()
             app.UseAuthorization();
-            
 
             app.MapControllerRoute(
                 name: "default",
