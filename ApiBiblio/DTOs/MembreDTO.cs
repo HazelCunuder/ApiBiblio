@@ -12,7 +12,7 @@ namespace ApiBiblio.DTOs
         public required string AdresseMail { get; set; }
         public string? Telephone { get; set; }
 
-        public List<string> HistoriqueMembre { get; set; } = new();
+        public string HistoriqueMembre { get; set; }
 
         public MembreDTO() { }
         public MembreDTO(Membre MembreItem) =>

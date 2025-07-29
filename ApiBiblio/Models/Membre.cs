@@ -39,8 +39,5 @@ namespace ApiBiblio.Models
         [Phone]
         [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         public required string Telephone {  get; set; }
-
-        [DisplayName("Historique d'emprunt")]
-        public List<string>? HistoriqueMembre { get; set; } = new();
     }
 }
