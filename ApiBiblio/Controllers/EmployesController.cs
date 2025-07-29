@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiBiblio.Database;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Identity; // AJOUT : Pour le hashage du mot de passe
 
 namespace ApiBiblio.Controllers
 {
@@ -55,14 +51,16 @@ namespace ApiBiblio.Controllers
         }
 
         // POST: Employes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye,IdRole")] Employe employe)
         {
             if (ModelState.IsValid)
             {
+                // AJOUT : Hashage du mot de passe avant sauvegarde
+                var hasher = new PasswordHasher<Employe>();
+                employe.MdpEmploye = hasher.HashPassword(employe, employe.MdpEmploye);
+
                 _context.Add(employe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,8 +87,6 @@ namespace ApiBiblio.Controllers
         }
 
         // POST: Employes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NomEmploye,PrenomEmploye,LoginEmploye,MdpEmploye,IdRole")] Employe employe)
@@ -104,6 +100,10 @@ namespace ApiBiblio.Controllers
             {
                 try
                 {
+                    // AJOUT : Hashage du mot de passe avant sauvegarde
+                    var hasher = new PasswordHasher<Employe>();
+                    employe.MdpEmploye = hasher.HashPassword(employe, employe.MdpEmploye);
+
                     _context.Update(employe);
                     await _context.SaveChangesAsync();
                 }
