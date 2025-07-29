@@ -44,5 +44,9 @@ namespace ApiBiblio.Models
 
         [ForeignKey("IdGenre")]
         public Genre? Genre { get; set; }
+
+        public ICollection<Livre_Auteur> Livre_Auteurs { get; set; } = new List<Livre_Auteur>();
+
+        public ICollection<Livre_Genre> Livre_Genres { get; set; } = new List<Livre_Genre>();
     }
 }

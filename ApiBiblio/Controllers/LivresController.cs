@@ -74,25 +74,6 @@ namespace ApiBiblio.Controllers
                 Console.WriteLine($"{key} = {formData[key]}");
             }
 
-            // Also log the raw query string (though it's a POST)
-            Console.WriteLine("Raw Form Data: " + HttpContext.Request.GetEncodedUrl());
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(livre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            foreach (var entry in ModelState)
-            {
-                foreach (var error in entry.Value.Errors)
-                {
-                    Console.WriteLine($"ModelState Error on '{entry.Key}': {error.ErrorMessage}");
-                }
-            }
-
-            // Re-populate ViewData and return view as before
             ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre.IdAuteur);
             ViewData["IdCategorie"] = new SelectList(_context.Categories, "Id", "NomCategorie", livre.IdCategorie);
             ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre.IdGenre);

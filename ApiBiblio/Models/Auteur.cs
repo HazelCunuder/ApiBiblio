@@ -19,5 +19,7 @@ namespace ApiBiblio.Models
         [Required(ErrorMessage = "Vous ne pouvez pas laisser ce champ vide")]
         [StringLength(150)]
         public string? PrenomAuteur { get; set; }
+
+        public ICollection<Livre_Auteur> Livre_Auteurs { get; set; } = new List<Livre_Auteur>();
     }
 }
