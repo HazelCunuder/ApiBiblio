@@ -35,21 +35,43 @@ namespace ApiBiblio
                     }
                 });
                 c.EnableAnnotations();
+
+                // authentification swagger
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+        {
+            new OpenApiSecurityScheme{
+                Reference = new OpenApiReference{
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
             });
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login"; // Redirige vers login si non connecté
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/Login"; // Ou une page d'accès refusé
-    });
-
-            // === AJOUT : Configuration de l’authentification JWT ===
+            // ======= AUTHENTICATION : Cookie (site) + JWT (API) =======
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                // Cookie par défaut (pour MVC), JWT possible pour l’API si besoin
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/Login";
             })
             .AddJwtBearer(options =>
             {
@@ -63,6 +85,8 @@ namespace ApiBiblio
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
             });
+
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
@@ -84,7 +108,8 @@ namespace ApiBiblio
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication(); // AJOUT : Doit être AVANT app.UseAuthorization()
+
+            app.UseAuthentication(); // Obligatoire avant Authorization !
             app.UseAuthorization();
 
             app.MapControllerRoute(
