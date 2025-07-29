@@ -60,7 +60,7 @@ namespace ApiBiblio
     });
             });
 
-            // ======= AUTHENTICATION : Cookie (site) + JWT (API) =======
+          // AUTHENTICATION : Cookie (site) + JWT 
             builder.Services.AddAuthentication(options =>
             {
                 // Cookie par défaut (pour MVC), JWT possible pour l’API si besoin
@@ -109,7 +109,7 @@ namespace ApiBiblio
 
             app.UseRouting();
 
-            app.UseAuthentication(); // Obligatoire avant Authorization !
+            app.UseAuthentication(); // Obligatoire avant Authorization 
             app.UseAuthorization();
 
             app.MapControllerRoute(
