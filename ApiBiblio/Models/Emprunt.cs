@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiBiblio.Models
@@ -7,17 +8,18 @@ namespace ApiBiblio.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Date de l'emprunt")]
+        [DisplayName("Date de début d'emprunt")]
         [DataType(DataType.Date)]
         public DateOnly DateEmprunt { get; set; }
 
-        [Display(Name = "Rendu ?")]
+        [DisplayName("Rendu ?")]
         public required bool Statut { get; set; }
 
-        [Display(Name = "Date de retour")]
+        [DisplayName("Date de retour")]
         [DataType(DataType.Date)]
         public DateOnly DateRetour { get; set; }
 
+        [DisplayName("Id de l'emprunteur")]
         public int IdMembre { get; set; }
     }
 }
