@@ -55,7 +55,7 @@ namespace ApiBiblio.Controllers
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                    return RedirectToAction("Index", "Home"); // Redirige vers la page d'accueil ou livres
+                    return RedirectToAction("Index", "Home");
                 }
             }
             ViewBag.Error = "Identifiants incorrects";

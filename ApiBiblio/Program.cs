@@ -1,8 +1,9 @@
 using ApiBiblio.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace ApiBiblio
@@ -35,6 +36,14 @@ namespace ApiBiblio
                 });
                 c.EnableAnnotations();
             });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirige vers login si non connecté
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login"; // Ou une page d'accès refusé
+    });
 
             // === AJOUT : Configuration de l’authentification JWT ===
             builder.Services.AddAuthentication(options =>
