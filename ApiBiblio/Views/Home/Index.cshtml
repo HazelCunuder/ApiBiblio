@@ -1,36 +1,20 @@
-﻿@using System.Security.Claims
-
-@if (User.Identity.IsAuthenticated)
-{
-    <p>Connecté : oui</p>
-    <p>Prénom (ClaimTypes.Name) : @User.Identity.Name</p>
-    <p>Nom d'utilisateur (Login) : @User.FindFirstValue(ClaimTypes.NameIdentifier)</p>
-    <p>
-        Rôle actuel :
-        @if (User.IsInRole("Admin"))
-        {
-            <b>Admin</b>
-        }
-        else if (User.IsInRole("Employe"))
-        {
-
-            <b>Employé</b>
-        }
-        else
-        {
-
-            <b>aucun</b>
-        }
-    </p>
-    <p>Tous les claims :</p>
-    <ul>
-        @foreach (var c in User.Claims)
-        {
-            <li>@c.Type : @c.Value</li>
-        }
-    </ul>
+﻿@{
+    ViewData["Title"] = "Biblio Simplon";
 }
-else
-{
-    <p>Non connecté</p>
-}
+
+<div class="landing-wrapper text-white d-flex flex-column justify-content-center align-items-center text-center">
+    <div class="overlay px-4 py-5">
+        <h1 class="display-3 fw-bold mb-4">@ViewData["Title"]</h1>
+        <p class="lead mb-4">
+            Bienvenue à la bibliothèque numérique de Simplon ! <br />
+            Explorez des centaines de livres, auteurs, catégories, et bien plus encore.
+        </p>
+        <div>
+            <a class="btn btn-primary btn-lg me-2" asp-controller="Livres" asp-action="Index">Explorer les livres</a>
+            @if (!(User.Identity.IsAuthenticated))
+            {
+                <a class="btn btn-outline-light btn-lg" asp-controller="Account" asp-action="Login">Se connecter</a>
+            }
+        </div>
+    </div>
+</div>
