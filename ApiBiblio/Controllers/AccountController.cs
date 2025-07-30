@@ -22,6 +22,9 @@ namespace ApiBiblio.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
             return View();
         }
 
@@ -47,7 +50,7 @@ namespace ApiBiblio.Controllers
             {
                 // Récupère le rôle associé à l'employé
                 var assignation = await _context.AssignerRole.FirstOrDefaultAsync(a => a.EmployeId == employe.Id);
-                var role = "Employe";
+                var role = "Employe"; // Rôle par défaut si non trouvé
                 if (assignation != null)
                 {
                     var r = await _context.Roles.FirstOrDefaultAsync(x => x.Id == assignation.RoleId);
@@ -82,19 +85,25 @@ namespace ApiBiblio.Controllers
 
         // Affiche la page de création d'employé (GET)
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
+            // Récupère les rôles à afficher dans la liste déroulante
+            ViewBag.Roles = await _context.Roles.ToListAsync();
             return View();
         }
 
-        // Traite la création d'un nouvel employé (POST)
+        // Traite la création d'un nouvel employé ou membre (POST)
         [HttpPost]
-        public async Task<IActionResult> Create(string nomEmploye, string prenomEmploye, string loginEmploye, string mdpEmploye)
+        public async Task<IActionResult> Create(string nomEmploye, string prenomEmploye, string loginEmploye, string mdpEmploye, int roleId)
         {
             // Vérifie si un employé existe déjà avec ce login
             if (await _context.Employes.AnyAsync(e => e.LoginEmploye == loginEmploye))
             {
                 ViewBag.Error = "Login déjà utilisé.";
+                ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles on error
                 return View();
             }
 
@@ -105,22 +114,31 @@ namespace ApiBiblio.Controllers
                 NomEmploye = nomEmploye,
                 PrenomEmploye = prenomEmploye,
                 LoginEmploye = loginEmploye,
-                MdpEmploye = hasher.HashPassword(null!, mdpEmploye)
+                MdpEmploye = hasher.HashPassword(null!, mdpEmploye),
+                IdRole = roleId
             };
 
             // Ajoute le nouvel employé à la base
             _context.Employes.Add(employe);
             await _context.SaveChangesAsync();
 
-            // Assigne automatiquement le rôle Admin à ce nouvel employé (à adapter si besoin)
-            var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.NomRole == "Admin");
-            if (adminRole != null)
+            // Assigne le rôle sélectionné à ce nouvel employé
+            var selectedRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            if (selectedRole != null)
             {
-                _context.AssignerRole.Add(new AssignerRole { RoleId = adminRole.Id, EmployeId = employe.Id });
+                _context.AssignerRole.Add(new AssignerRole { RoleId = selectedRole.Id, EmployeId = employe.Id });
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                // Gère le cas où aucun rôle ou un rôle invalide est sélectionné (par exemple, attribuer un rôle par défaut)
+                ViewBag.Error = "Rôle sélectionné invalide. Veuillez réessayer.";
+                ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles on error
+                return View();
+            }
 
-            ViewBag.Message = "Employé créé avec succès !";
+            ViewBag.Message = "Compte créé avec succès !";
+            ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles for a fresh view
             return View();
         }
 
