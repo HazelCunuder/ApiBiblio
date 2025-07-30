@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ApiBiblio.Database;
+﻿using ApiBiblio.Database;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity; // AJOUT : Pour le hashage du mot de passe
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiBiblio.Controllers
 {
+    [Authorize]
     public class EmployesController : Controller
     {
         private readonly BiblioDb _context;

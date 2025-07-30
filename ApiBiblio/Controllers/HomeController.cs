@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace ApiBiblio.Controllers
 {
@@ -23,6 +24,7 @@ namespace ApiBiblio.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Dashboard()
         {
             return View();
