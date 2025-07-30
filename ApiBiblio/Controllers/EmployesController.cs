@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ApiBiblio.Database;
 using ApiBiblio.Models;
 using Microsoft.AspNetCore.Identity; // AJOUT : Pour le hashage du mot de passe
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ApiBiblio.Controllers
 {
