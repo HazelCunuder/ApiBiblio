@@ -1,6 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Politique de confidentialité";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container my-5">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    <p class="lead">
+        Conformément au Règlement Général sur la Protection des Données (RGPD), cette page vous informe de la manière
+        dont vos données personnelles sont collectées, utilisées et protégées par Biblio Simplon.
+    </p>
+
+    <h5 class="mt-4">1. Données collectées</h5>
+    <p>
+        Nous collectons uniquement les données nécessaires au bon fonctionnement de notre service (nom, email, historique
+        d’emprunt, etc.). Aucune donnée sensible n’est recueillie sans votre consentement explicite.
+    </p>
+
+    <h5 class="mt-4">2. Utilisation des données</h5>
+    <p>
+        Les données sont utilisées uniquement pour gérer vos emprunts, vous identifier, et améliorer votre expérience utilisateur.
+        Elles ne sont ni vendues ni transmises à des tiers sans base légale ou votre autorisation.
+    </p>
+
+    <h5 class="mt-4">3. Vos droits</h5>
+    <p>
+        Vous avez le droit d’accéder à vos données, de les rectifier, de demander leur suppression ou de vous opposer à leur
+        traitement. Pour exercer ces droits, veuillez nous contacter via notre page <a asp-controller="Home" asp-action="Contact">Contact</a>.
+    </p>
+
+    <h5 class="mt-4">4. Sécurité</h5>
+    <p>
+        Vos données sont protégées par des mesures de sécurité techniques et organisationnelles afin de garantir leur
+        confidentialité, intégrité et disponibilité.
+    </p>
+
+    <h5 class="mt-4">5. Durée de conservation</h5>
+    <p>
+        Les données sont conservées aussi longtemps que nécessaire pour les finalités pour lesquelles elles ont été collectées,
+        ou pour se conformer aux obligations légales.
+    </p>
+
+    <div class="mt-5">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Retour à l’accueil</a>
+    </div>
+</div>
