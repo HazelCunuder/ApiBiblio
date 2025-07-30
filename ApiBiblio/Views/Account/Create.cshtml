@@ -1,23 +1,55 @@
-﻿@{
-    ViewBag.Title = "Créer un Employé";
+﻿@model ApiBiblio.Models.Employe
+
+@{
+    ViewData["Title"] = "Créer un Compte";
 }
-<h2>Créer un Employé</h2>
+
+<h2>Créer un Compte</h2>
+
 @if (ViewBag.Error != null)
 {
-    <div style="color:red;">@ViewBag.Error</div>
+    <div class="alert alert-danger">@ViewBag.Error</div>
 }
+
 @if (ViewBag.Message != null)
 {
-    <div style="color:green;">@ViewBag.Message</div>
+    <div class="alert alert-success">@ViewBag.Message</div>
 }
+
 <form asp-action="Create" method="post">
-    <label>Nom :</label>
-    <input type="text" name="nomEmploye" required /><br />
-    <label>Prénom :</label>
-    <input type="text" name="prenomEmploye" required /><br />
-    <label>Login :</label>
-    <input type="text" name="loginEmploye" required /><br />
-    <label>Mot de passe :</label>
-    <input type="password" name="mdpEmploye" required /><br />
-    <button type="submit">Créer</button>
+    <div class="form-group">
+        <label for="nomEmploye">Nom:</label>
+        <input type="text" class="form-control" id="nomEmploye" name="nomEmploye" required />
+    </div>
+    <div class="form-group">
+        <label for="prenomEmploye">Prénom:</label>
+        <input type="text" class="form-control" id="prenomEmploye" name="prenomEmploye" required />
+    </div>
+    <div class="form-group">
+        <label for="loginEmploye">Login:</label>
+        <input type="text" class="form-control" id="loginEmploye" name="loginEmploye" required />
+    </div>
+    <div class="form-group">
+        <label for="mdpEmploye">Mot de passe:</label>
+        <input type="password" class="form-control" id="mdpEmploye" name="mdpEmploye" required />
+    </div>
+    <div class="form-group">
+        <label for="roleId">Type de Compte:</label>
+        <select class="form-control" id="roleId" name="roleId" required>
+            <option value="">-- Sélectionnez un rôle --</option>
+            {{-- Parcourt les rôles passés par le contrôleur (ViewBag.Roles) --}}
+            @if (ViewBag.Roles != null)
+            {
+                @foreach (var role in ViewBag.Roles)
+                {
+                    <option value="@role.Id">@role.NomRole</option>
+                }
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Créer le compte</button>
 </form>
+
+<div class="mt-3">
+    <p>Déjà un compte ? <a href="@Url.Action("Login", "Account")">Se connecter</a></p>
+</div>
