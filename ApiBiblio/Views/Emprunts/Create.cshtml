@@ -5,13 +5,63 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container my-5">
-    <h1 class="text-primary mb-4">@ViewData["Title"]</h1>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+<style>
+    .main-title {
+        color: #fff;
+        font-family: 'Merriweather', serif;
+        background: #284475;
+        border-radius: 1.5rem 1.5rem 0 0;
+        padding: 1.2rem 2rem;
+        font-weight: bold;
+        font-size: 2rem;
+        letter-spacing: 1px;
+        margin-bottom: 0;
+        box-shadow: 0 8px 32px rgba(40,68,117,0.12);
+    }
+
+    .card-biblio {
+        background: #F5F6F8;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 16px rgba(40,68,117,0.13);
+        border: none;
+    }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        transition: background 0.2s, color 0.2s;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-outline-secondary {
+        border-radius: 1.5rem;
+        font-weight: 500;
+    }
+
+    .form-label {
+        color: #427AA1;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="card card-biblio">
+        <div class="main-title">
+            <i class="bi bi-plus-circle"></i> @ViewData["Title"]
+        </div>
+        <div class="card-body px-4 py-4">
             <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
 
                 <div class="mb-3">
                     <label asp-for="DateEmprunt" class="form-label"></label>
@@ -42,9 +92,9 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Retour à la liste
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
                     </a>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-main">
                         <i class="bi bi-check-circle"></i> Enregistrer
                     </button>
                 </div>

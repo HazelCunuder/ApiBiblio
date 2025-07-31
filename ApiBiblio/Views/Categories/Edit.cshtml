@@ -5,14 +5,69 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container my-5">
-    <h2 class="text-primary mb-4">
-        <i class="bi bi-pencil-square"></i> @ViewData["Title"]
-    </h2>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .edit-cat-title {
+        color: #fff;
+        background: linear-gradient(90deg, #427AA1 80%, #72D6C9 120%);
+        border-radius: 1.2rem 1.2rem 0 0;
+        padding: 1.3rem 2.3rem 1.05rem 2.3rem;
+        font-family: 'Merriweather', serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.9em;
+        letter-spacing: -1px;
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+    }
+
+    .cat-form-card {
+        border-radius: 1.2rem;
+        box-shadow: 0 6px 22px rgba(40,68,117,0.11);
+        border: none;
+        background: #F5F6F8;
+        padding: 2rem 2.5rem 2rem 2.5rem;
+    }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        transition: background 0.17s, color 0.17s;
+        padding: 0.62em 1.5em;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-outline-secondary {
+        border-radius: 1.5rem;
+        font-weight: 600;
+        padding: 0.62em 1.5em;
+        border-width: 2px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="edit-cat-title mb-3">
+        <i class="bi bi-pencil-square"></i> @ViewData["Title"]
+    </div>
     <div class="row">
-        <div class="col-md-6">
-            <form asp-action="Edit" class="shadow p-4 rounded bg-light">
+        <div class="col-md-7 col-lg-6">
+            <form asp-action="Edit" class="cat-form-card">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="Id" />
 
@@ -26,7 +81,7 @@
                     <a asp-action="Index" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Retour à la liste
                     </a>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-main">
                         <i class="bi bi-save"></i> Enregistrer
                     </button>
                 </div>
