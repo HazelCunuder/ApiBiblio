@@ -1,28 +1,34 @@
 ﻿@model ApiBiblio.Models.Genre
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Supprimer le genre";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Genre</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomGenre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NomGenre)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <h3>Voulez-vous vraiment supprimer ce genre ?</h3>
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Genre</strong>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NomGenre)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.NomGenre)</dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger me-2">
+                    <i class="bi bi-trash"></i> Supprimer
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </form>
+        </div>
+    </div>
 </div>
