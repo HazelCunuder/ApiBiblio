@@ -57,6 +57,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Create
+        [Authorize(Roles = "Admin, Employe")]
         public IActionResult Create()
         {
             ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur");
@@ -68,6 +69,8 @@ namespace ApiBiblio.Controllers
         // POST: Livres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Create([Bind("Id,IdAuteur,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdGenre")] Livre livre)
         {
             if (ModelState.IsValid)
@@ -85,6 +88,8 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Edit/5
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,6 +109,8 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Delete/5
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,6 +134,8 @@ namespace ApiBiblio.Controllers
         // POST: Livres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var livre = await _context.Livres.FindAsync(id);
