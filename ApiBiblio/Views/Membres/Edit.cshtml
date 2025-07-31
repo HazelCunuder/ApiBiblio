@@ -1,60 +1,50 @@
 ﻿@model ApiBiblio.Models.Membre
-
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Modifier un membre";
 }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-<h1>Edit</h1>
-
-<h4>Membre</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="NomMembre" class="control-label"></label>
-                <input asp-for="NomMembre" class="form-control" />
-                <span asp-validation-for="NomMembre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrenomMembre" class="control-label"></label>
-                <input asp-for="PrenomMembre" class="form-control" />
-                <span asp-validation-for="PrenomMembre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MdpMembre" class="control-label"></label>
-                <input asp-for="MdpMembre" class="form-control" />
-                <span asp-validation-for="MdpMembre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdressePostale" class="control-label"></label>
-                <input asp-for="AdressePostale" class="form-control" />
-                <span asp-validation-for="AdressePostale" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdresseMail" class="control-label"></label>
-                <input asp-for="AdresseMail" class="form-control" />
-                <span asp-validation-for="AdresseMail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telephone" class="control-label"></label>
-                <input asp-for="Telephone" class="form-control" />
-                <span asp-validation-for="Telephone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="container mt-4" style="max-width:500px;">
+    <h3 style="color:#427AA1;font-family:'Merriweather',serif;">Modifier le membre</h3>
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-2">
+            <label asp-for="PrenomMembre" class="form-label"></label>
+            <input asp-for="PrenomMembre" class="form-control" />
+            <span asp-validation-for="PrenomMembre" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="NomMembre" class="form-label"></label>
+            <input asp-for="NomMembre" class="form-control" />
+            <span asp-validation-for="NomMembre" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="AdresseMail" class="form-label"></label>
+            <input asp-for="AdresseMail" class="form-control" />
+            <span asp-validation-for="AdresseMail" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="Telephone" class="form-label"></label>
+            <input asp-for="Telephone" class="form-control" />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="AdressePostale" class="form-label"></label>
+            <input asp-for="AdressePostale" class="form-control" />
+            <span asp-validation-for="AdressePostale" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="MdpMembre" class="form-label"></label>
+            <input asp-for="MdpMembre" type="password" class="form-control" />
+            <span asp-validation-for="MdpMembre" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="border-radius:1em;">
+            <i class="bi bi-check-circle"></i> Enregistrer
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary" style="border-radius:1em;">Annuler</a>
+    </form>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -1,135 +1,48 @@
-﻿@model IEnumerable<ApiBiblio.Models.Livre>
+﻿@model ApiBiblio.Models.Membre
 @{
-    ViewBag.Title = "Livres";
-    // Détection du rôle employé ou admin
-    var isEmployeOrAdmin = User.IsInRole("Admin") || User.IsInRole("Employe");
+    ViewBag.Title = "Ajouter un membre";
 }
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<style>
-    body {
-        background: #FAFAF7;
-        color: #273043;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .bibli-card {
-        background: #F5F6F8;
-        border-radius: 1.5rem;
-        box-shadow: 0 4px 16px rgba(40,68,117,0.10);
-        border: none;
-        transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-        .bibli-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 10px 32px rgba(40,68,117,0.18);
-        }
-
-    .card-title {
-        color: #284475;
-        font-family: 'Merriweather', serif;
-        font-size: 1.3rem;
-    }
-
-    .badge-categorie {
-        background: #FFD447;
-        color: #284475;
-        font-weight: 600;
-        border-radius: 1rem;
-        font-size: 0.9rem;
-    }
-
-    .badge-dispo {
-        border-radius: 1rem;
-        font-size: 0.95rem;
-        font-weight: 600;
-        padding: 0.25em 0.9em;
-    }
-
-        .badge-dispo.dispo {
-            background: #72D6C9;
-            color: #284475;
-        }
-
-        .badge-dispo.indispo {
-            background: #EC5B5B;
-            color: #fff;
-        }
-
-    .btn-main {
-        background: #72D6C9;
-        color: #284475;
-        border-radius: 1.5rem;
-        font-weight: bold;
-        border: none;
-        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
-        transition: background 0.2s, color 0.2s;
-    }
-
-        .btn-main:hover {
-            background: #427AA1;
-            color: #FFD447;
-        }
-
-    .bibli-img {
-        width: 100%;
-        height: 170px;
-        object-fit: cover;
-        border-radius: 1.2rem 1.2rem 0 0;
-        box-shadow: 0 2px 8px rgba(40,68,117,0.07);
-        background: #e2e5eb;
-    }
-</style>
-
-<div class="container mt-5">
-    <h2 class="mb-4" style="color:#284475; font-family:'Merriweather',serif;">Catalogue des Livres</h2>
-
-    @if (isEmployeOrAdmin)
-    {
-        <a asp-action="Create" class="btn btn-main mb-4">
-            <i class="bi bi-plus-circle"></i> Ajouter un livre
-        </a>
-    }
-
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var livre in Model)
-        {
-            <div class="col">
-                <div class="card bibli-card h-100">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
-                         alt="Couverture livre"
-                         class="bibli-img" />
-                    <div class="card-body pb-2">
-                        <h5 class="card-title mb-2">@livre.Titre</h5>
-                        <div class="mb-2">
-                            <span class="badge badge-categorie">
-                                @livre.Categorie?.NomCategorie
-                            </span>
-                            <span class="badge badge-dispo @(livre.Disponible ? "dispo" : "indispo")">
-                                @(livre.Disponible ? "Disponible" : "Indisponible")
-                            </span>
-                        </div>
-                        <div>
-                            <span style="color:#427AA1; font-size:1.07em;"><i class="bi bi-calendar"></i> @livre.AnnePublication</span>
-                        </div>
-                        <div style="font-size:0.93em; color:#888;">ISBN : @livre.ISBN</div>
-                    </div>
-                    @if (isEmployeOrAdmin)
-                    {
-                        <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center pb-3 pt-1">
-                            <a asp-action="Edit" asp-route-id="@livre.Id" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                <i class="bi bi-pencil"></i> Modifier
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@livre.Id" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                                <i class="bi bi-trash"></i> Supprimer
-                            </a>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-    </div>
+<div class="container mt-4" style="max-width:500px;">
+    <h3 style="color:#284475;font-family:'Merriweather',serif;">Ajouter un membre</h3>
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-2">
+            <label asp-for="PrenomMembre" class="form-label"></label>
+            <input asp-for="PrenomMembre" class="form-control" />
+            <span asp-validation-for="PrenomMembre" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="NomMembre" class="form-label"></label>
+            <input asp-for="NomMembre" class="form-control" />
+            <span asp-validation-for="NomMembre" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="AdresseMail" class="form-label"></label>
+            <input asp-for="AdresseMail" class="form-control" />
+            <span asp-validation-for="AdresseMail" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="Telephone" class="form-label"></label>
+            <input asp-for="Telephone" class="form-control" />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="AdressePostale" class="form-label"></label>
+            <input asp-for="AdressePostale" class="form-control" />
+            <span asp-validation-for="AdressePostale" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="MdpMembre" class="form-label"></label>
+            <input asp-for="MdpMembre" type="password" class="form-control" />
+            <span asp-validation-for="MdpMembre" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success" style="border-radius:1em;">
+            <i class="bi bi-check-circle"></i> Ajouter
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary" style="border-radius:1em;">Retour</a>
+    </form>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
