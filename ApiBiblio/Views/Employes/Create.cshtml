@@ -39,7 +39,7 @@
 
                 <div class="mb-3">
                     <label asp-for="IdRole" class="form-label">Rôle</label>
-                    <select asp-for="IdRole" asp-items="ViewBag.NomRole" class="form-select"></select>
+                    <select asp-for="IdRole" asp-items="@(ViewData["IdRole"] as IEnumerable<SelectListItem>)" class="form-select"></select>
                     <span asp-validation-for="IdRole" class="text-danger"></span>
                 </div>
 
