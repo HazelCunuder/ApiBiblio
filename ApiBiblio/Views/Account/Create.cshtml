@@ -374,4 +374,82 @@
         transition: all 0.2s ease;
     }
 
+    .focused {
+        transform: scale(1.02);
+        transition: transform 0.2s ease;
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        }
+
+    .alert {
+        border-radius: 0.75rem;
+        border: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);
+        color: #721c24;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+    }
+
+    .text-danger {
+        font-weight: 600;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .invalid-feedback {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .input-group .btn {
+        border-left: 0;
+    }
+
+    .input-group .form-control:focus {
+        z-index: 3;
+    }
+
+    .border-info {
+        border-width: 2px !important;
+    }
+
+    .card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    }
+
+    /* Sélecteur de rôle avec style personnalisé */
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    }
 </style>
