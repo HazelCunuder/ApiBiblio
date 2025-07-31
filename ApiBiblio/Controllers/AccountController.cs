@@ -168,6 +168,62 @@ namespace ApiBiblio.Controllers
             return View();
         }
 
+         // Affiche la page de création de membre (GET)
+        [HttpGet]
+        public IActionResult CreateMembre()
+        {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
+            return View();
+        }
+
+        // Traite la création d'un nouveau membre (POST)
+        [HttpPost]
+        public async Task<IActionResult> CreateMembre(string nomMembre, string prenomMembre, string mdpMembre, string adressePostale, string adresseMail, string telephone)
+        {
+            // Validation des champs obligatoires
+            if (string.IsNullOrWhiteSpace(nomMembre) || string.IsNullOrWhiteSpace(prenomMembre) || string.IsNullOrWhiteSpace(mdpMembre))
+            {
+                ViewBag.Error = "Le nom, prénom et mot de passe sont obligatoires.";
+                return View();
+            }
+
+            // Vérifie si un membre existe déjà avec cette adresse email (si fournie)
+            if (!string.IsNullOrWhiteSpace(adresseMail) && await _context.Membres.AnyAsync(m => m.AdresseMail == adresseMail))
+            {
+                ViewBag.Error = "Cette adresse email est déjà utilisée.";
+                return View();
+            }
+
+            try
+            {
+                // Hash le mot de passe avant de le stocker
+                var hasher = new PasswordHasher<Membre>();
+                var membre = new Membre
+                {
+                    NomMembre = nomMembre.Trim(),
+                    PrenomMembre = prenomMembre.Trim(),
+                    MdpMembre = hasher.HashPassword(null!, mdpMembre),
+                    AdressePostale = !string.IsNullOrWhiteSpace(adressePostale) ? adressePostale.Trim() : null,
+                    AdresseMail = !string.IsNullOrWhiteSpace(adresseMail) ? adresseMail.Trim() : null,
+                    Telephone = !string.IsNullOrWhiteSpace(telephone) ? telephone.Trim() : null
+                };
+
+                // Ajoute le nouveau membre à la base
+                _context.Membres.Add(membre);
+                await _context.SaveChangesAsync();
+
+                ViewBag.Message = "Membre créé avec succès !";
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Une erreur s'est produite lors de la création du membre. Veuillez réessayer.";
+                return View();
+            }
+        }
+
         // Déconnecte l'utilisateur
         [HttpPost]
         public async Task<IActionResult> Logout()
