@@ -1,53 +1,63 @@
 ﻿@model ApiBiblio.Models.Employe
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Créer un employé";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-person-plus-fill text-primary"></i> @ViewData["Title"]</h2>
 
-<h4>Employe</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NomEmploye" class="control-label"></label>
-                <input asp-for="NomEmploye" class="form-control" />
-                <span asp-validation-for="NomEmploye" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrenomEmploye" class="control-label"></label>
-                <input asp-for="PrenomEmploye" class="form-control" />
-                <span asp-validation-for="PrenomEmploye" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LoginEmploye" class="control-label"></label>
-                <input asp-for="LoginEmploye" class="form-control" />
-                <span asp-validation-for="LoginEmploye" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MdpEmploye" class="control-label"></label>
-                <input asp-for="MdpEmploye" class="form-control" />
-                <span asp-validation-for="MdpEmploye" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdRole" class="control-label"></label>
-                <select asp-for="IdRole" class ="form-control" asp-items="ViewBag.IdRole"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="NomEmploye" class="form-label"></label>
+                    <input asp-for="NomEmploye" class="form-control" />
+                    <span asp-validation-for="NomEmploye" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PrenomEmploye" class="form-label"></label>
+                    <input asp-for="PrenomEmploye" class="form-control" />
+                    <span asp-validation-for="PrenomEmploye" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoginEmploye" class="form-label"></label>
+                    <input asp-for="LoginEmploye" class="form-control" />
+                    <span asp-validation-for="LoginEmploye" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MdpEmploye" class="form-label"></label>
+                    <input asp-for="MdpEmploye" type="password" class="form-control" />
+                    <span asp-validation-for="MdpEmploye" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="IdRole" class="form-label">Rôle</label>
+                    <select asp-for="IdRole" asp-items="ViewBag.NomRole" class="form-select"></select>
+                    <span asp-validation-for="IdRole" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Créer
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
