@@ -5,19 +5,111 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .auteur-header {
+        color: #284475;
+        font-family: 'Merriweather', serif;
+        font-weight: 700;
+        font-size: 2rem;
+    }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        transition: background 0.2s, color 0.2s;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .table-custom {
+        background: #fff;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(40,68,117,0.09);
+    }
+
+        .table-custom th {
+            background: #427AA1;
+            color: #fff;
+            font-size: 1.08em;
+            border: none;
+            letter-spacing: 0.01em;
+        }
+
+
+        .table-custom td {
+            background: #F5F6F8;
+            color: #273043;
+            border-top: 2px solid #FAFAF7;
+            font-size: 1em;
+        }
+
+    .btn-warning {
+        background: #FFD447;
+        color: #284475;
+        border-radius: 1.2rem;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background: #284475;
+            color: #FFD447;
+        }
+
+    .btn-info {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.2rem;
+        border: none;
+    }
+
+        .btn-info:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-danger {
+        background: #EC5B5B;
+        color: #fff;
+        border-radius: 1.2rem;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+</style>
+
 <div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <h2 class="auteur-header mb-2">
             <i class="bi bi-person-lines-fill"></i> Liste des auteurs
         </h2>
-        <a asp-action="Create" class="btn btn-success">
+        <a asp-action="Create" class="btn btn-main">
             <i class="bi bi-plus-circle"></i> Ajouter un auteur
         </a>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped table-bordered align-middle shadow-sm">
-            <thead class="table-dark">
+        <table class="table table-custom align-middle">
+            <thead>
                 <tr>
                     <th>@Html.DisplayNameFor(model => model.First().NomAuteur)</th>
                     <th>@Html.DisplayNameFor(model => model.First().PrenomAuteur)</th>
