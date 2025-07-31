@@ -1,5 +1,6 @@
 ﻿using ApiBiblio.Database;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,6 +9,7 @@ namespace ApiBiblio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] // Nécessite une authentification
     public class EmployesEndPoints : ControllerBase
     {
         private readonly BiblioDb _context;

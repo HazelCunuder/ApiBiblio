@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiBiblio.Database;
+using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ApiBiblio.Database;
-using ApiBiblio.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApiBiblio.Controllers
 {
+    [Authorize]
     public class EmpruntsController : Controller
     {
         private readonly BiblioDb _context;

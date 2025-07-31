@@ -22,79 +22,114 @@ namespace ApiBiblio.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
             return View();
         }
 
-        // Traite la soumission du formulaire de connexion (POST)
+        // Traite la soumission du formulaire de connexion (POST) - UNIFIÉ pour Employés ET Membres
         [HttpPost]
         public async Task<IActionResult> Login(string loginEmploye, string mdpEmploye)
         {
-            // Recherche l'employé par son login
+            // 1. D'abord, recherche parmi les employés par login
             var employe = await _context.Employes.FirstOrDefaultAsync(e => e.LoginEmploye == loginEmploye);
 
-            // Si l'utilisateur n'existe pas, affiche un message d'erreur
-            if (employe == null)
+            if (employe != null)
             {
-                ViewBag.Error = "Login inconnu";
-                return View();
-            }
+                // Vérifie le mot de passe de l'employé
+                var hasherEmploye = new PasswordHasher<Employe>();
+                var resultEmploye = hasherEmploye.VerifyHashedPassword(employe, employe.MdpEmploye, mdpEmploye);
 
-            // Vérifie si le mot de passe entré correspond au hash stocké
-            var hasher = new PasswordHasher<Employe>();
-            var result = hasher.VerifyHashedPassword(employe, employe.MdpEmploye, mdpEmploye);
-
-            if (result == PasswordVerificationResult.Success)
-            {
-                // Récupère le rôle associé à l'employé
-                var assignation = await _context.AssignerRole.FirstOrDefaultAsync(a => a.EmployeId == employe.Id);
-                var role = "Employe";
-                if (assignation != null)
+                if (resultEmploye == PasswordVerificationResult.Success)
                 {
-                    var r = await _context.Roles.FirstOrDefaultAsync(x => x.Id == assignation.RoleId);
-                    if (r != null) role = r.NomRole; // Ex : "Admin"
+                    // Récupère le rôle associé à l'employé
+                    var assignation = await _context.AssignerRole.FirstOrDefaultAsync(a => a.EmployeId == employe.Id);
+                    var role = "Employe"; // Rôle par défaut si non trouvé
+                    if (assignation != null)
+                    {
+                        var r = await _context.Roles.FirstOrDefaultAsync(x => x.Id == assignation.RoleId);
+                        if (r != null) role = r.NomRole; // Ex : "Admin"
+                    }
+
+                    // Crée la liste des claims pour l'employé connecté
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, employe.PrenomEmploye), // Permet d'afficher le prénom dans le menu
+                        new Claim(ClaimTypes.NameIdentifier, employe.Id.ToString()), // ID unique de l'employé
+                        new Claim(ClaimTypes.Role, role), // Utilisé pour la gestion des accès par rôle
+                        new Claim("UserType", "Employe") // Permet de distinguer employé/membre
+                    };
+
+                    // Connecte l'employé
+                    await ConnectUser(claims);
+                    return RedirectToAction("Index", "Home");
                 }
-
-                // Crée la liste des claims pour l'utilisateur connecté
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, employe.PrenomEmploye), // Permet d'afficher le prénom dans le menu
-                    new Claim(ClaimTypes.NameIdentifier, employe.Id.ToString()), // ID unique de l'employé
-                    new Claim(ClaimTypes.Role, role) // Utilisé pour la gestion des accès par rôle
-                };
-
-                // Crée l'identité et le principal pour l'authentification cookie
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                // Connecte l'utilisateur (création du cookie d'authentification)
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-                // Redirige vers la page d'accueil
-                return RedirectToAction("Index", "Home");
             }
-            else
+
+            // 2. Si pas trouvé parmi les employés, recherche parmi les membres par email
+            var membre = await _context.Membres.FirstOrDefaultAsync(m => m.AdresseMail == loginEmploye);
+
+            if (membre != null)
             {
-                // Mot de passe incorrect : affiche un message d'erreur
-                ViewBag.Error = "Mauvais mot de passe";
-                return View();
+                // Vérifie le mot de passe du membre
+                var hasherMembre = new PasswordHasher<Membre>();
+                var resultMembre = hasherMembre.VerifyHashedPassword(membre, membre.MdpMembre, mdpEmploye);
+
+                if (resultMembre == PasswordVerificationResult.Success)
+                {
+                    // Crée la liste des claims pour le membre connecté
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, membre.PrenomMembre), // Permet d'afficher le prénom dans le menu
+                        new Claim(ClaimTypes.NameIdentifier, membre.Id.ToString()), // ID unique du membre
+                        new Claim(ClaimTypes.Role, "Membre"), // Rôle fixe pour les membres
+                        new Claim("UserType", "Membre") // Permet de distinguer employé/membre
+                    };
+
+                    // Connecte le membre
+                    await ConnectUser(claims);
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
+            // 3. Si aucune correspondance trouvée
+            ViewBag.Error = "Identifiants incorrects";
+            return View();
+        }
+
+        // Méthode privée pour éviter la duplication de code de connexion
+        private async Task ConnectUser(List<Claim> claims)
+        {
+            // Crée l'identité et le principal pour l'authentification cookie
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // Connecte l'utilisateur (création du cookie d'authentification)
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
 
         // Affiche la page de création d'employé (GET)
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
+            // Récupère les rôles à afficher dans la liste déroulante
+            ViewBag.Roles = await _context.Roles.ToListAsync();
             return View();
         }
 
         // Traite la création d'un nouvel employé (POST)
         [HttpPost]
-        public async Task<IActionResult> Create(string nomEmploye, string prenomEmploye, string loginEmploye, string mdpEmploye)
+        public async Task<IActionResult> Create(string nomEmploye, string prenomEmploye, string loginEmploye, string mdpEmploye, int roleId)
         {
             // Vérifie si un employé existe déjà avec ce login
             if (await _context.Employes.AnyAsync(e => e.LoginEmploye == loginEmploye))
             {
                 ViewBag.Error = "Login déjà utilisé.";
+                ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles on error
                 return View();
             }
 
@@ -105,23 +140,88 @@ namespace ApiBiblio.Controllers
                 NomEmploye = nomEmploye,
                 PrenomEmploye = prenomEmploye,
                 LoginEmploye = loginEmploye,
-                MdpEmploye = hasher.HashPassword(null!, mdpEmploye)
+                MdpEmploye = hasher.HashPassword(null!, mdpEmploye),
+                IdRole = roleId
             };
 
             // Ajoute le nouvel employé à la base
             _context.Employes.Add(employe);
             await _context.SaveChangesAsync();
 
-            // Assigne automatiquement le rôle Admin à ce nouvel employé (à adapter si besoin)
-            var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.NomRole == "Admin");
-            if (adminRole != null)
+            // Assigne le rôle sélectionné à ce nouvel employé
+            var selectedRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
+            if (selectedRole != null)
             {
-                _context.AssignerRole.Add(new AssignerRole { RoleId = adminRole.Id, EmployeId = employe.Id });
+                _context.AssignerRole.Add(new AssignerRole { RoleId = selectedRole.Id, EmployeId = employe.Id });
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                // Gère le cas où aucun rôle ou un rôle invalide est sélectionné (par exemple, attribuer un rôle par défaut)
+                ViewBag.Error = "Rôle sélectionné invalide. Veuillez réessayer.";
+                ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles on error
+                return View();
+            }
 
-            ViewBag.Message = "Employé créé avec succès !";
+            ViewBag.Message = "Compte créé avec succès !";
+            ViewBag.Roles = await _context.Roles.ToListAsync(); // Re-fetch roles for a fresh view
             return View();
+        }
+
+         // Affiche la page de création de membre (GET)
+        [HttpGet]
+        public IActionResult CreateMembre()
+        {
+            // Initialise ViewBag.Error et ViewBag.Message pour éviter les NullReferenceException au premier chargement
+            ViewBag.Error = null;
+            ViewBag.Message = null;
+            return View();
+        }
+
+        // Traite la création d'un nouveau membre (POST)
+        [HttpPost]
+        public async Task<IActionResult> CreateMembre(string nomMembre, string prenomMembre, string mdpMembre, string adressePostale, string adresseMail, string telephone)
+        {
+            // Validation des champs obligatoires
+            if (string.IsNullOrWhiteSpace(nomMembre) || string.IsNullOrWhiteSpace(prenomMembre) || string.IsNullOrWhiteSpace(mdpMembre))
+            {
+                ViewBag.Error = "Le nom, prénom et mot de passe sont obligatoires.";
+                return View();
+            }
+
+            // Vérifie si un membre existe déjà avec cette adresse email (si fournie)
+            if (!string.IsNullOrWhiteSpace(adresseMail) && await _context.Membres.AnyAsync(m => m.AdresseMail == adresseMail))
+            {
+                ViewBag.Error = "Cette adresse email est déjà utilisée.";
+                return View();
+            }
+
+            try
+            {
+                // Hash le mot de passe avant de le stocker
+                var hasher = new PasswordHasher<Membre>();
+                var membre = new Membre
+                {
+                    NomMembre = nomMembre.Trim(),
+                    PrenomMembre = prenomMembre.Trim(),
+                    MdpMembre = hasher.HashPassword(null!, mdpMembre),
+                    AdressePostale = !string.IsNullOrWhiteSpace(adressePostale) ? adressePostale.Trim() : null,
+                    AdresseMail = !string.IsNullOrWhiteSpace(adresseMail) ? adresseMail.Trim() : null,
+                    Telephone = !string.IsNullOrWhiteSpace(telephone) ? telephone.Trim() : null
+                };
+
+                // Ajoute le nouveau membre à la base
+                _context.Membres.Add(membre);
+                await _context.SaveChangesAsync();
+
+                ViewBag.Message = "Membre créé avec succès !";
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Une erreur s'est produite lors de la création du membre. Veuillez réessayer.";
+                return View();
+            }
         }
 
         // Déconnecte l'utilisateur

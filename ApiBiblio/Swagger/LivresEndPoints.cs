@@ -1,16 +1,18 @@
 ﻿using ApiBiblio.Database;
+using ApiBiblio.DTOs;
 using ApiBiblio.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiBiblio.DTOs;
 
 namespace ApiBiblio.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // Nécessite une authentification
     public class LivresEndpoints : ControllerBase
     {
         private readonly BiblioDb _context;

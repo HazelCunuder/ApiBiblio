@@ -26,32 +26,37 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Accueil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Livres" asp-action="Index">Livres</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Auteurs" asp-action="Index">Auteurs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Genres" asp-action="Index">Genres</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Categories" asp-action="Index">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Employes" asp-action="Index">Employés</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Membres" asp-action="Index">Membres</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Emprunts" asp-action="Index">Emprunts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employe"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Livres" asp-action="Index">Livres</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auteurs" asp-action="Index">Auteurs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Genres" asp-action="Index">Genres</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Membres" asp-action="Index">Membres</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Emprunts" asp-action="Index">Emprunts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                            </li>
+                        }
+                        
                         @if (User.IsInRole("Admin"))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Employes" asp-action="Index">Employés</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Employes" asp-action="Create">Créer un Employé</a>
                             </li>
