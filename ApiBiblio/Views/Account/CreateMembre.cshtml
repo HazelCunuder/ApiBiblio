@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Créer un Compte Membre";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-success text-white text-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-friends"></i> Créer un Compte Membre
+                    </h3>
+                    <p class="mb-0 mt-2"><small>Rejoignez notre bibliothèque en tant que membre</small></p>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Messages d'erreur ou de succès -->
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> @ViewBag.Error
+                        </div>
+                    }
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> @ViewBag.Message
+                        </div>
+                    }
+
+                    <!-- Formulaire de création -->
+                    <form method="post" asp-action="CreateMembre" asp-controller="Account">
+
+                        <!-- Informations personnelles -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-user"></i> Informations personnelles
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nomMembre" class="form-label">
+                                        <i class="fas fa-id-badge text-muted"></i> Nom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="nomMembre"
+                                           name="nomMembre"
+                                           placeholder="Nom de famille"
+                                           required
+                                           maxlength="100">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="prenomMembre" class="form-label">
+                                        <i class="fas fa-user text-muted"></i> Prénom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="prenomMembre"
+                                           name="prenomMembre"
+                                           placeholder="Prénom"
+                                           required
+                                           maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations de connexion -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-key"></i> Informations de connexion
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="mdpMembre" class="form-label">
+                                    <i class="fas fa-lock text-muted"></i> Mot de passe <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="mdpMembre"
+                                           name="mdpMembre"
+                                           placeholder="Mot de passe sécurisé"
+                                           required
+                                           minlength="6">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye" id="eyeIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-shield-alt text-success"></i> Minimum 6 caractères recommandés
+                                </div>
+                            </div>
+                        </div>
+
+        </div>
+    </div>
+</div>
+
