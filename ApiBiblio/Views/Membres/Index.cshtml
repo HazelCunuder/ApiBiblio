@@ -1,66 +1,75 @@
-﻿@model IEnumerable<ApiBiblio.Models.Membre>
-
+﻿@model List<ApiBiblio.Models.Membre>
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Liste des membres";
 }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<h1>Index</h1>
+<style>
+    .member-table {
+        background: #F5F6F8;
+        border-radius: 1.4rem;
+        box-shadow: 0 6px 20px rgba(40,68,117,0.13);
+        padding: 1.3em 1.6em;
+        margin-top: 2em;
+        font-size: 1.09em;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NomMembre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrenomMembre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MdpMembre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdressePostale)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdresseMail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telephone)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NomMembre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrenomMembre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MdpMembre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdressePostale)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdresseMail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telephone)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    th, td {
+        padding: 0.7em 1.2em;
+    }
+
+    th {
+        background: #FFD447;
+        color: #284475;
+        border-radius: 0.7em;
+    }
+
+    tr {
+        border-bottom: 1px solid #e6e9f0;
+    }
+
+    .btn-sm {
+        font-size: 0.96em;
+        border-radius: 1em;
+    }
+</style>
+
+<div class="container">
+    <h2 style="color:#284475; font-family:'Merriweather',serif;" class="mb-3">
+        <i class="bi bi-people"></i> Liste des membres
+    </h2>
+    <a asp-action="Create" class="btn btn-success mb-3" style="border-radius:1em;">
+        <i class="bi bi-plus-circle"></i> Ajouter un membre
+    </a>
+    <div class="member-table">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var membre in Model)
+                {
+                    <tr>
+                        <td>@membre.PrenomMembre</td>
+                        <td>@membre.NomMembre</td>
+                        <td>@membre.AdresseMail</td>
+                        <td>@membre.Telephone</td>
+                        <td>@membre.AdressePostale</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@membre.Id" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></a>
+                            <a asp-action="Delete" asp-route-id="@membre.Id" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
