@@ -1,55 +1,85 @@
 ﻿@model ApiBiblio.Models.Employe
-
 @{
-    ViewData["Title"] = "Créer un Compte";
+    ViewData["Title"] = "Créer un Compte Employé";
 }
 
-<h2>Créer un Compte</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-primary text-white text-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-tie"></i> Créer un Compte Employé
+                    </h3>
+                    <p class="mb-0 mt-2"><small>Création d'un nouveau compte pour le personnel</small></p>
+                </div>
 
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
+                <div class="card-body p-4">
+                    <!-- Messages d'erreur ou de succès -->
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
 
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-success">@ViewBag.Message</div>
-}
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle"></i> @ViewBag.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="nomEmploye">Nom:</label>
-        <input type="text" class="form-control" id="nomEmploye" name="nomEmploye" required />
-    </div>
-    <div class="form-group">
-        <label for="prenomEmploye">Prénom:</label>
-        <input type="text" class="form-control" id="prenomEmploye" name="prenomEmploye" required />
-    </div>
-    <div class="form-group">
-        <label for="loginEmploye">Login:</label>
-        <input type="text" class="form-control" id="loginEmploye" name="loginEmploye" required />
-    </div>
-    <div class="form-group">
-        <label for="mdpEmploye">Mot de passe:</label>
-        <input type="password" class="form-control" id="mdpEmploye" name="mdpEmploye" required />
-    </div>
-    <div class="form-group">
-        <label for="roleId">Type de Compte:</label>
-        <select class="form-control" id="roleId" name="roleId" required>
-            <option value="">-- Sélectionnez un rôle --</option>
-            {{-- Parcourt les rôles passés par le contrôleur (ViewBag.Roles) --}}
-            @if (ViewBag.Roles != null)
-            {
-                @foreach (var role in ViewBag.Roles)
-                {
-                    <option value="@role.Id">@role.NomRole</option>
-                }
-            }
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Créer le compte</button>
-</form>
+                    <!-- Formulaire de création -->
+                    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
 
-<div class="mt-3">
-    <p>Déjà un compte ? <a href="@Url.Action("Login", "Account")">Se connecter</a></p>
+                        <!-- Informations personnelles -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-user"></i> Informations personnelles
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nomEmploye" class="form-label">
+                                        <i class="fas fa-id-badge text-muted"></i> Nom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="nomEmploye"
+                                           name="nomEmploye"
+                                           placeholder="Nom de famille"
+                                           required
+                                           maxlength="100"
+                                           autocomplete="family-name">
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-times-circle"></i> Veuillez saisir un nom valide.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="prenomEmploye" class="form-label">
+                                        <i class="fas fa-user text-muted"></i> Prénom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="prenomEmploye"
+                                           name="prenomEmploye"
+                                           placeholder="Prénom"
+                                           required
+                                           maxlength="100"
+                                           autocomplete="given-name">
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-times-circle"></i> Veuillez saisir un prénom valide.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+        </div>
+    </div>
 </div>
