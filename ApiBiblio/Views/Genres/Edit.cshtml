@@ -5,27 +5,94 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .genre-edit-card {
+        background: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 6px 20px rgba(40,68,117,0.13);
+        padding: 2rem 2.4rem 1.7rem 2.4rem;
+        margin-top: 2rem;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .genre-title {
+        color: #427AA1;
+        font-family: 'Merriweather', serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .btn-edit-main {
+        background: #FFD447;
+        color: #284475;
+        border-radius: 1.4rem;
+        font-weight: 600;
+        border: none;
+        padding: 0.6em 2.1em;
+        font-size: 1.08em;
+        transition: background 0.17s, color 0.17s;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+    }
+
+        .btn-edit-main:hover {
+            background: #284475;
+            color: #FFD447;
+        }
+
+    .btn-retour {
+        border-radius: 1.2rem;
+        color: #427AA1;
+        font-weight: 600;
+        background: #F5F6F8;
+        margin-left: 0.7em;
+        padding: 0.6em 1.6em;
+        border: none;
+        transition: background 0.17s, color 0.17s;
+    }
+
+        .btn-retour:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+</style>
+
 <div class="container my-4">
-    <h1>@ViewData["Title"]</h1>
+    <div class="genre-edit-card">
+        <div class="genre-title">
+            <i class="bi bi-pencil"></i> @ViewData["Title"]
+        </div>
 
-    <div class="row">
-        <div class="col-md-6 col-lg-4">
-            <form asp-action="Edit" method="post" novalidate>
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <input type="hidden" asp-for="Id" />
+        <form asp-action="Edit" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="Id" />
 
-                <div class="mb-3">
-                    <label asp-for="NomGenre" class="form-label"></label>
-                    <input asp-for="NomGenre" class="form-control" />
-                    <span asp-validation-for="NomGenre" class="text-danger"></span>
-                </div>
+            <div class="mb-3">
+                <label asp-for="NomGenre" class="form-label fw-bold"></label>
+                <input asp-for="NomGenre" class="form-control" />
+                <span asp-validation-for="NomGenre" class="text-danger"></span>
+            </div>
 
-                <button type="submit" class="btn btn-primary">
+            <div class="d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-edit-main">
                     <i class="bi bi-save"></i> Enregistrer
                 </button>
-                <a asp-action="Index" class="btn btn-secondary ms-2">Retour à la liste</a>
-            </form>
-        </div>
+                <a asp-action="Index" class="btn btn-retour ms-2">
+                    <i class="bi bi-arrow-left-circle"></i> Retour
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 
