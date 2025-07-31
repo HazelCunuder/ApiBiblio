@@ -97,6 +97,100 @@
                             </div>
                         </div>
 
+                        <!-- Informations de contact -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-address-book"></i> Informations de contact
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="adresseMail" class="form-label">
+                                    <i class="fas fa-envelope text-muted"></i> Adresse email
+                                </label>
+                                <input type="email"
+                                       class="form-control form-control-lg"
+                                       id="adresseMail"
+                                       name="adresseMail"
+                                       placeholder="votre.email@exemple.com"
+                                       maxlength="255">
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Cette adresse sera utilisée pour la connexion si renseignée
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telephone" class="form-label">
+                                    <i class="fas fa-phone text-muted"></i> Téléphone
+                                </label>
+                                <input type="tel"
+                                       class="form-control form-control-lg"
+                                       id="telephone"
+                                       name="telephone"
+                                       placeholder="01 23 45 67 89"
+                                       maxlength="20">
+                                <div class="form-text">
+                                    <i class="fas fa-mobile-alt text-success"></i> Format suggéré : 01 23 45 67 89
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="adressePostale" class="form-label">
+                                    <i class="fas fa-map-marker-alt text-muted"></i> Adresse postale
+                                </label>
+                                <textarea class="form-control form-control-lg"
+                                          id="adressePostale"
+                                          name="adressePostale"
+                                          rows="3"
+                                          maxlength="500"
+                                          placeholder="123 Rue de la Bibliothèque, 59000 Lille, France"></textarea>
+                                <div class="form-text d-flex justify-content-between">
+                                    <span><i class="fas fa-home text-success"></i> Adresse complète (rue, ville, code postal)</span>
+                                    <span><span id="adresseCount">0</span>/500 caractères</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left"></i> Retour à la connexion
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-user-plus"></i> Créer le compte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer avec liens utiles -->
+                <div class="card-footer text-center bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        En créant un compte, vous acceptez nos conditions d'utilisation
+                    </small>
+                    <br>
+                    <div class="mt-2">
+                        <span class="text-muted">Vous êtes un employé ?</span>
+                        <a href="@Url.Action("Create", "Account")" class="text-decoration-none">
+                            <i class="fas fa-user-tie"></i> Créer un compte employé
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations importantes -->
+            <div class="alert alert-info mt-3" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-lightbulb"></i> Informations importantes
+                </h6>
+                <hr>
+                <ul class="mb-0">
+                    <li>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires</li>
+                    <li>Votre adresse email servira d'identifiant de connexion si renseignée</li>
+                    <li>Toutes vos données sont protégées et confidentielles</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
