@@ -1,31 +1,41 @@
 ﻿@model ApiBiblio.Models.Genre
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Créer un genre";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <h2 class="mb-4">
+        <i class="bi bi-plus-circle-fill text-success"></i> @ViewData["Title"]
+    </h2>
 
-<h4>Genre</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NomGenre" class="control-label"></label>
-                <input asp-for="NomGenre" class="form-control" />
-                <span asp-validation-for="NomGenre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="NomGenre" class="form-label"></label>
+                    <input asp-for="NomGenre" class="form-control" placeholder="Ex: Fantastique" />
+                    <span asp-validation-for="NomGenre" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill"></i> Créer
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
