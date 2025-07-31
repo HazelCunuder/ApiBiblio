@@ -5,21 +5,136 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .genre-header-bar {
+        background: #427AA1;
+        border-radius: 1.2rem 1.2rem 0 0;
+        padding: 1.3rem 2.2rem;
+        margin-bottom: 0;
+        box-shadow: 0 4px 16px rgba(40,68,117,0.09);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+        .genre-header-bar h2 {
+            color: #fff;
+            font-family: 'Merriweather', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        border: none;
+        font-size: 1.08em;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        transition: background 0.18s, color 0.18s;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .genre-table-card {
+        background: #fff;
+        border-radius: 0 0 1.5rem 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 8px 26px rgba(40,68,117,0.13);
+        border: none;
+    }
+
+    .genre-table thead tr {
+        background: #F5F6F8;
+    }
+
+    .genre-table thead th {
+        color: #284475;
+        border: none;
+        font-size: 1.08em;
+        letter-spacing: .02em;
+        font-weight: 600;
+    }
+
+    .genre-table td {
+        background: #FAFAF7;
+        color: #273043;
+        border-top: 2px solid #F5F6F8;
+        font-size: 1em;
+    }
+
+    .btn-action {
+        border-radius: 1.3rem;
+        font-weight: 600;
+        padding: 0.34em 1.3em;
+        font-size: 1em;
+        box-shadow: 0 2px 7px rgba(40,68,117,0.08);
+        border: none;
+        margin-left: 0.25em;
+        margin-right: 0.25em;
+    }
+
+    .btn-edit {
+        background: #FFD447;
+        color: #284475;
+    }
+
+        .btn-edit:hover {
+            background: #284475;
+            color: #FFD447;
+        }
+
+    .btn-details {
+        background: #72D6C9;
+        color: #284475;
+    }
+
+        .btn-details:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-delete {
+        background: #EC5B5B;
+        color: #fff;
+    }
+
+        .btn-delete:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+</style>
+
 <div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary">
+    <div class="genre-header-bar mb-0">
+        <h2>
             <i class="bi bi-tags-fill me-2"></i>@ViewData["Title"]
         </h2>
-        <a asp-action="Create" class="btn btn-success">
+        <a asp-action="Create" class="btn btn-main">
             <i class="bi bi-plus-circle me-1"></i> Nouveau genre
         </a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="genre-table-card">
         <div class="card-body p-0">
-            <table class="table table-hover table-striped mb-0">
-                <thead class="table-light">
-                    <tr class="align-middle">
+            <table class="table genre-table table-hover table-striped mb-0 align-middle">
+                <thead>
+                    <tr>
                         <th>Nom du genre</th>
                         <th class="text-end pe-4">Actions</th>
                     </tr>
@@ -28,7 +143,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="2" class="text-center py-4">
+                            <td colspan="2" class="text-center py-4" style="background:#fff;">
                                 <em>Aucun genre enregistré.</em>
                             </td>
                         </tr>
@@ -37,19 +152,19 @@
                     {
                         foreach (var item in Model)
                         {
-                            <tr class="align-middle">
+                            <tr>
                                 <td>@Html.DisplayFor(modelItem => item.NomGenre)</td>
                                 <td class="text-end">
                                     <a asp-action="Details" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-info me-1" title="Voir les détails">
+                                       class="btn btn-details btn-action" title="Voir les détails">
                                         <i class="bi bi-info-circle"></i>
                                     </a>
                                     <a asp-action="Edit" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-primary me-1" title="Modifier">
+                                       class="btn btn-edit btn-action" title="Modifier">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     <a asp-action="Delete" asp-route-id="@item.Id"
-                                       class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                       class="btn btn-delete btn-action" title="Supprimer">
                                         <i class="bi bi-trash3"></i>
                                     </a>
                                 </td>
