@@ -80,6 +80,155 @@
                             </div>
                         </div>
 
+                        <!-- Informations de connexion -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-key"></i> Informations de connexion
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="loginEmploye" class="form-label">
+                                    <i class="fas fa-at text-muted"></i> Login <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       id="loginEmploye"
+                                       name="loginEmploye"
+                                       placeholder="Identifiant de connexion unique"
+                                       required
+                                       maxlength="50"
+                                       autocomplete="username">
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Ce login sera utilisé pour se connecter au système
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Veuillez saisir un login valide.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mdpEmploye" class="form-label">
+                                    <i class="fas fa-lock text-muted"></i> Mot de passe <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="mdpEmploye"
+                                           name="mdpEmploye"
+                                           placeholder="Mot de passe sécurisé"
+                                           required
+                                           minlength="6"
+                                           autocomplete="new-password">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye" id="eyeIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-shield-alt text-success"></i> Minimum 6 caractères recommandés
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Le mot de passe doit contenir au moins 6 caractères.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rôle et permissions -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-users-cog"></i> Rôle et permissions
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="roleId" class="form-label">
+                                    <i class="fas fa-user-tag text-muted"></i> Type de compte <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select form-select-lg" id="roleId" name="roleId" required>
+                                    <option value="">-- Sélectionnez un rôle --</option>
+                                    @if (ViewBag.Roles != null)
+                                    {
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            <option value="@role.Id">
+                                                @role.NomRole
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Détermine les permissions accordées à cet employé
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Veuillez sélectionner un rôle.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left"></i> Retour à la connexion
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-user-plus"></i> Créer le compte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer avec liens utiles -->
+                <div class="card-footer text-center bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Besoin d'aide ? Contactez l'administrateur système
+                    </small>
+                    <br>
+                    <div class="mt-2">
+                        <span class="text-muted">Vous cherchez à créer un compte membre ?</span>
+                        <a href="@Url.Action("CreateMembre", "Account")" class="text-decoration-none">
+                            <i class="fas fa-user-friends"></i> Cliquez ici
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations sur les rôles -->
+            <div class="card mt-3 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle"></i> À propos des rôles
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">
+                                <i class="fas fa-crown"></i> Administrateur
+                            </h6>
+                            <p class="small mb-2">Accès complet au système, gestion des utilisateurs et configuration.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-success">
+                                <i class="fas fa-user-tie"></i> Employé
+                            </h6>
+                            <p class="small mb-2">Accès aux fonctionnalités de base du système de bibliothèque.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Informations importantes -->
+            <div class="alert alert-info mt-3" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-lightbulb"></i> Informations importantes
+                </h6>
+                <hr>
+                <ul class="mb-0">
+                    <li>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires</li>
+                    <li>Votre adresse email servira d'identifiant de connexion si renseignée</li>
+                    <li>Toutes vos données sont protégées et confidentielles</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
