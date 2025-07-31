@@ -1,25 +1,31 @@
 ﻿@model ApiBiblio.Models.Genre
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Détails du genre";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container my-4">
+    <h1>@ViewData["Title"]</h1>
 
-<div>
-    <h4>Genre</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomGenre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NomGenre)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card">
+        <div class="card-header">
+            <strong>Genre</strong>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NomGenre)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.NomGenre)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">
+            <i class="bi bi-pencil"></i> Modifier
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
 </div>
