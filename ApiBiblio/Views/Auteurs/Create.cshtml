@@ -1,36 +1,42 @@
 ﻿@model ApiBiblio.Models.Auteur
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Ajouter un auteur";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container my-5">
+    <div class="card shadow rounded-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                <i class="bi bi-person-plus-fill"></i> Ajouter un nouvel auteur
+            </h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-<h4>Auteur</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NomAuteur" class="control-label"></label>
-                <input asp-for="NomAuteur" class="form-control" />
-                <span asp-validation-for="NomAuteur" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrenomAuteur" class="control-label"></label>
-                <input asp-for="PrenomAuteur" class="form-control" />
-                <span asp-validation-for="PrenomAuteur" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label asp-for="NomAuteur" class="form-label"></label>
+                    <input asp-for="NomAuteur" class="form-control" />
+                    <span asp-validation-for="NomAuteur" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PrenomAuteur" class="form-label"></label>
+                    <input asp-for="PrenomAuteur" class="form-control" />
+                    <span asp-validation-for="PrenomAuteur" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle-fill"></i> Enregistrer
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

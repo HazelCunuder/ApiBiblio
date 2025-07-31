@@ -1,37 +1,42 @@
 ﻿@model ApiBiblio.Models.Auteur
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Modifier l’auteur";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container my-5">
+    <h2 class="mb-4 text-primary">
+        <i class="bi bi-pencil-square"></i> Modifier un auteur
+    </h2>
 
-<h4>Auteur</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="NomAuteur" class="control-label"></label>
-                <input asp-for="NomAuteur" class="form-control" />
-                <span asp-validation-for="NomAuteur" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrenomAuteur" class="control-label"></label>
-                <input asp-for="PrenomAuteur" class="form-control" />
-                <span asp-validation-for="PrenomAuteur" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="NomAuteur" class="form-label fw-bold"></label>
+                    <input asp-for="NomAuteur" class="form-control" placeholder="Nom de famille de l’auteur" />
+                    <span asp-validation-for="NomAuteur" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PrenomAuteur" class="form-label fw-bold"></label>
+                    <input asp-for="PrenomAuteur" class="form-control" placeholder="Prénom de l’auteur" />
+                    <span asp-validation-for="PrenomAuteur" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Enregistrer
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
