@@ -5,12 +5,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container my-5">
-    <h2 class="text-primary mb-4">
-        <i class="bi bi-info-circle"></i> @ViewData["Title"]
-    </h2>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-    <div class="card shadow-sm border-0">
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .categorie-details-title {
+        color: #fff;
+        background: linear-gradient(90deg, #427AA1 80%, #72D6C9 120%);
+        border-radius: 1.2rem 1.2rem 0 0;
+        padding: 1.3rem 2.3rem 1.05rem 2.3rem;
+        font-family: 'Merriweather', serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.7em;
+        letter-spacing: -1px;
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+    }
+
+    .card-details {
+        border-radius: 1.2rem;
+        box-shadow: 0 6px 22px rgba(40,68,117,0.11);
+        border: none;
+        overflow: hidden;
+    }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.4rem;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.10);
+        transition: background 0.17s, color 0.17s;
+        padding: 0.62em 1.5em;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-outline-secondary {
+        border-radius: 1.4rem;
+        font-weight: 600;
+        padding: 0.62em 1.5em;
+        border-width: 2px;
+    }
+
+    .fw-bold {
+        color: #427AA1;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="categorie-details-title mb-3">
+        <i class="bi bi-info-circle"></i> @ViewData["Title"]
+    </div>
+
+    <div class="card card-details border-0 mb-3">
         <div class="card-body">
             <dl class="row mb-0">
                 <dt class="col-sm-3 fw-bold">
@@ -27,7 +86,7 @@
         <a asp-action="Index" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left-circle"></i> Retour à la liste
         </a>
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-main">
             <i class="bi bi-pencil"></i> Modifier
         </a>
     </div>

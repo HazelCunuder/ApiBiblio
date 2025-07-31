@@ -5,30 +5,98 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container my-4">
-    <h1>@ViewData["Title"]</h1>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-    <h3>Voulez-vous vraiment supprimer ce genre ?</h3>
+<style>
+    body {
+        background: #FAFAF7;
+        color: #273043;
+        font-family: 'Inter', sans-serif;
+    }
 
-    <div class="card">
-        <div class="card-header">
-            <strong>Genre</strong>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NomGenre)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.NomGenre)</dd>
-            </dl>
+    .genre-delete-card {
+        background: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 6px 22px rgba(40,68,117,0.12);
+        max-width: 500px;
+        margin: 2.5rem auto 0 auto;
+        padding: 2.2rem 2.2rem 1.2rem 2.2rem;
+    }
 
-            <form asp-action="Delete" method="post">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger me-2">
-                    <i class="bi bi-trash"></i> Supprimer
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Retour à la liste
-                </a>
-            </form>
-        </div>
+    .genre-delete-title {
+        color: #ec5b5b;
+        font-family: 'Merriweather', serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .genre-details-label {
+        color: #427AA1;
+        font-weight: 600;
+        font-size: 1.1em;
+    }
+
+    .btn-suppr-main {
+        background: #EC5B5B;
+        color: #fff;
+        border-radius: 1.4rem;
+        font-weight: 600;
+        border: none;
+        padding: 0.6em 2em;
+        font-size: 1.07em;
+        transition: background 0.18s, color 0.18s;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        margin-right: 0.7em;
+    }
+
+        .btn-suppr-main:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+    .btn-retour {
+        border-radius: 1.2rem;
+        color: #427AA1;
+        font-weight: 600;
+        background: #F5F6F8;
+        padding: 0.6em 1.7em;
+        border: none;
+        transition: background 0.16s, color 0.16s;
+    }
+
+        .btn-retour:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+</style>
+
+<div class="genre-delete-card">
+    <div class="genre-delete-title">
+        <i class="bi bi-trash"></i> @ViewData["Title"]
     </div>
+
+    <div class="mb-3 text-center" style="font-size:1.13em; color:#EC5B5B;">
+        <strong>Voulez-vous vraiment supprimer ce genre ?</strong>
+    </div>
+
+    <dl class="row mb-0">
+        <dt class="col-sm-4 genre-details-label">
+            @Html.DisplayNameFor(model => model.NomGenre)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.NomGenre)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" method="post" class="d-flex justify-content-center mt-4">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-suppr-main me-2">
+            <i class="bi bi-trash"></i> Supprimer
+        </button>
+        <a asp-action="Index" class="btn btn-retour">
+            <i class="bi bi-arrow-left-circle"></i> Retour
+        </a>
+    </form>
 </div>

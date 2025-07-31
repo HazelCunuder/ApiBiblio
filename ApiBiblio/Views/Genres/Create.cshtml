@@ -5,32 +5,96 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container my-5">
-    <h2 class="mb-4">
-        <i class="bi bi-plus-circle-fill text-success"></i> @ViewData["Title"]
-    </h2>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <form asp-action="Create" method="post">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<style>
+    .biblio-card {
+        background: #F5F6F8;
+        border-radius: 1.8rem;
+        box-shadow: 0 6px 26px rgba(40,68,117,0.12);
+        border: none;
+        max-width: 500px;
+        margin: 2.3rem auto;
+        font-family: 'Inter', sans-serif;
+    }
 
-                <div class="mb-3">
-                    <label asp-for="NomGenre" class="form-label"></label>
-                    <input asp-for="NomGenre" class="form-control" placeholder="Ex: Fantastique" />
-                    <span asp-validation-for="NomGenre" class="text-danger"></span>
-                </div>
+    .biblio-card-header {
+        background: #427AA1;
+        color: #F5F6F8;
+        border-radius: 1.8rem 1.8rem 0 0;
+        font-family: 'Merriweather', serif;
+        font-weight: 700;
+        padding: 1.2rem 2rem 1.1rem 2rem;
+        font-size: 1.3rem;
+    }
 
-                <div class="d-flex justify-content-between">
-                    <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle-fill"></i> Créer
-                    </button>
-                </div>
-            </form>
-        </div>
+    .biblio-label {
+        color: #427AA1;
+        font-weight: 600;
+        font-size: 1.05em;
+    }
+
+    .form-control {
+        border-radius: 1.3rem;
+        border: 1px solid #b6c8e3;
+        font-size: 1.06em;
+    }
+
+    .btn-main {
+        background: #72D6C9;
+        color: #284475;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        border: none;
+        font-size: 1.06em;
+        padding: 0.48em 1.5em;
+        box-shadow: 0 2px 8px rgba(40,68,117,0.09);
+        transition: background 0.18s, color 0.18s;
+    }
+
+        .btn-main:hover {
+            background: #427AA1;
+            color: #FFD447;
+        }
+
+    .btn-retour {
+        background: #FFD447;
+        color: #284475;
+        border-radius: 1.2rem;
+        font-weight: 600;
+        border: none;
+        font-size: 1.02em;
+        padding: 0.45em 1.4em;
+        transition: background 0.18s, color 0.18s;
+    }
+
+        .btn-retour:hover {
+            background: #284475;
+            color: #FFD447;
+        }
+</style>
+
+<div class="biblio-card">
+    <div class="biblio-card-header">
+        <i class="bi bi-plus-circle-fill"></i> @ViewData["Title"]
+    </div>
+    <div class="card-body py-4 px-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="mb-3">
+                <label asp-for="NomGenre" class="form-label biblio-label"></label>
+                <input asp-for="NomGenre" class="form-control" placeholder="Ex: Fantastique" />
+                <span asp-validation-for="NomGenre" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-retour">
+                    <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                </a>
+                <button type="submit" class="btn btn-main">
+                    <i class="bi bi-check-circle-fill"></i> Créer
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
