@@ -64,6 +64,12 @@
                     <span asp-validation-for="DateRetour" class="text-danger"></span>
                 </div>
 
+                <div class="mb-3 form-check">
+                    <input asp-for="Statut" class="form-check-input" type="checkbox" />
+                    <label class="form-check-label" asp-for="Statut">Livre rendu ?</label>
+                    <span asp-validation-for="Statut" class="text-danger"></span>
+                </div>
+
                 <div class="mb-3">
                     <label asp-for="IdMembre" class="form-label fw-bold"></label>
                     <select asp-for="IdMembre" class="form-select" asp-items="ViewBag.IdMembre"></select>

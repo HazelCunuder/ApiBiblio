@@ -100,7 +100,7 @@ namespace ApiBiblio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateEmprunt,Statut,DateRetour,IdMembre,IdLivre")] Emprunt emprunt)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DateEmprunt,DateRetour,IdMembre,IdLivre")] Emprunt emprunt)
         {
             if (id != emprunt.Id)
             {
@@ -125,6 +125,14 @@ namespace ApiBiblio.Controllers
                         throw;
                     }
                 }
+                return RedirectToAction(nameof(Index));
+            }
+            if (ModelState.IsValid)
+            {
+                emprunt.Statut = false; // Force "En cours" à la création
+
+                _context.Add(emprunt);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdLivre"] = new SelectList(_context.Livres, "Id", "Titre", emprunt.IdLivre);
