@@ -232,3 +232,146 @@
         </div>
     </div>
 </div>
+<!-- JavaScript pour améliorer l'expérience utilisateur -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion de l'affichage/masquage du mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('mdpEmploye');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (togglePassword && passwordField && eyeIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // Validation côté client
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Animation du bouton pendant la soumission
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+                    submitBtn.disabled = true;
+                }
+                form.classList.add('was-validated');
+            });
+        }
+
+        // Auto-dismiss des alertes après 5 secondes
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(function(alert) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            });
+        }, 5000);
+
+        // Animation au focus des champs
+        const inputs = document.querySelectorAll('.form-control, .form-select');
+        inputs.forEach(function(input) {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Validation en temps réel du login
+        const loginField = document.getElementById('loginEmploye');
+        if (loginField) {
+            loginField.addEventListener('input', function() {
+                const value = this.value.trim();
+                if (value.length > 0 && value.length < 3) {
+                    this.setCustomValidity('Le login doit contenir au moins 3 caractères');
+                } else if (!/^[a-zA-Z0-9._-]+$/.test(value) && value.length > 0) {
+                    this.setCustomValidity('Le login ne peut contenir que des lettres, chiffres, points, tirets et underscores');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .card {
+        border-radius: 1rem;
+        border: none;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border-bottom: none;
+    }
+
+    .card-footer {
+        border-top: 1px solid rgba(0,0,0,.125);
+        background-color: #f8f9fa !important;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .form-section {
+        position: relative;
+    }
+
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-divider {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border-color: #dee2e6;
+        opacity: 0.5;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+        .form-label i {
+            width: 16px;
+            margin-right: 0.5rem;
+        }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+</style>
