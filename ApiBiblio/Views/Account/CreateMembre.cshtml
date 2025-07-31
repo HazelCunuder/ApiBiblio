@@ -195,3 +195,187 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion de l'affichage/masquage du mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('mdpMembre');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (togglePassword && passwordField && eyeIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // Compteur de caractères pour l'adresse postale
+        const adressePostale = document.getElementById('adressePostale');
+        const adresseCount = document.getElementById('adresseCount');
+
+        if (adressePostale && adresseCount) {
+            adressePostale.addEventListener('input', function() {
+                const length = this.value.length;
+                adresseCount.textContent = length;
+
+                if (length > 450) {
+                    adresseCount.classList.add('text-warning');
+                    adresseCount.classList.remove('text-danger');
+                } else if (length > 480) {
+                    adresseCount.classList.remove('text-warning');
+                    adresseCount.classList.add('text-danger');
+                } else {
+                    adresseCount.classList.remove('text-warning', 'text-danger');
+                }
+            });
+        }
+
+        // Animation du bouton de soumission
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+                submitBtn.disabled = true;
+            });
+        }
+    });
+</script>
+
+<style>
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+
+    .card {
+        border-radius: 1rem;
+        border: none;
+        overflow: hidden;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .form-section {
+        position: relative;
+    }
+
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-divider {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border-color: #dee2e6;
+        opacity: 0.5;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+        .form-label i {
+            width: 16px;
+            margin-right: 0.5rem;
+        }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+    }
+
+    .alert {
+        border-radius: 0.75rem;
+        border: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);
+        color: #721c24;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .advantage-item {
+        padding: 0.5rem 0;
+        border-left: 3px solid #28a745;
+        padding-left: 0.75rem;
+        margin-left: 0.5rem;
+    }
+
+        .advantage-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s ease;
+        }
+
+    .text-danger {
+        font-weight: 600;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .input-group .btn {
+        border-left: 0;
+    }
+
+    .border-success {
+        border-width: 2px !important;
+        border-color: #28a745 !important;
+    }
+
+    .card-footer {
+        border-top: 1px solid rgba(0,0,0,.125);
+        background-color: #f8f9fa !important;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+</style>
