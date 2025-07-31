@@ -1,0 +1,381 @@
+﻿@{
+    ViewData["Title"] = "Créer un Compte Membre";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-success text-white text-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-friends"></i> Créer un Compte Membre
+                    </h3>
+                    <p class="mb-0 mt-2"><small>Rejoignez notre bibliothèque en tant que membre</small></p>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Messages d'erreur ou de succès -->
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> @ViewBag.Error
+                        </div>
+                    }
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> @ViewBag.Message
+                        </div>
+                    }
+
+                    <!-- Formulaire de création -->
+                    <form method="post" asp-action="CreateMembre" asp-controller="Account">
+
+                        <!-- Informations personnelles -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-user"></i> Informations personnelles
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nomMembre" class="form-label">
+                                        <i class="fas fa-id-badge text-muted"></i> Nom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="nomMembre"
+                                           name="nomMembre"
+                                           placeholder="Nom de famille"
+                                           required
+                                           maxlength="100">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="prenomMembre" class="form-label">
+                                        <i class="fas fa-user text-muted"></i> Prénom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="prenomMembre"
+                                           name="prenomMembre"
+                                           placeholder="Prénom"
+                                           required
+                                           maxlength="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations de connexion -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-key"></i> Informations de connexion
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="mdpMembre" class="form-label">
+                                    <i class="fas fa-lock text-muted"></i> Mot de passe <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="mdpMembre"
+                                           name="mdpMembre"
+                                           placeholder="Mot de passe sécurisé"
+                                           required
+                                           minlength="6">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye" id="eyeIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-shield-alt text-success"></i> Minimum 6 caractères recommandés
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations de contact -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-address-book"></i> Informations de contact
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="adresseMail" class="form-label">
+                                    <i class="fas fa-envelope text-muted"></i> Adresse email
+                                </label>
+                                <input type="email"
+                                       class="form-control form-control-lg"
+                                       id="adresseMail"
+                                       name="adresseMail"
+                                       placeholder="votre.email@exemple.com"
+                                       maxlength="255">
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Cette adresse sera utilisée pour la connexion si renseignée
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telephone" class="form-label">
+                                    <i class="fas fa-phone text-muted"></i> Téléphone
+                                </label>
+                                <input type="tel"
+                                       class="form-control form-control-lg"
+                                       id="telephone"
+                                       name="telephone"
+                                       placeholder="01 23 45 67 89"
+                                       maxlength="20">
+                                <div class="form-text">
+                                    <i class="fas fa-mobile-alt text-success"></i> Format suggéré : 01 23 45 67 89
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="adressePostale" class="form-label">
+                                    <i class="fas fa-map-marker-alt text-muted"></i> Adresse postale
+                                </label>
+                                <textarea class="form-control form-control-lg"
+                                          id="adressePostale"
+                                          name="adressePostale"
+                                          rows="3"
+                                          maxlength="500"
+                                          placeholder="123 Rue de la Bibliothèque, 59000 Lille, France"></textarea>
+                                <div class="form-text d-flex justify-content-between">
+                                    <span><i class="fas fa-home text-success"></i> Adresse complète (rue, ville, code postal)</span>
+                                    <span><span id="adresseCount">0</span>/500 caractères</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left"></i> Retour à la connexion
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-user-plus"></i> Créer le compte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer avec liens utiles -->
+                <div class="card-footer text-center bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        En créant un compte, vous acceptez nos conditions d'utilisation
+                    </small>
+                    <br>
+                    <div class="mt-2">
+                        <span class="text-muted">Vous êtes un employé ?</span>
+                        <a href="@Url.Action("Create", "Account")" class="text-decoration-none">
+                            <i class="fas fa-user-tie"></i> Créer un compte employé
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations importantes -->
+            <div class="alert alert-info mt-3" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-lightbulb"></i> Informations importantes
+                </h6>
+                <hr>
+                <ul class="mb-0">
+                    <li>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires</li>
+                    <li>Votre adresse email servira d'identifiant de connexion si renseignée</li>
+                    <li>Toutes vos données sont protégées et confidentielles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion de l'affichage/masquage du mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('mdpMembre');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (togglePassword && passwordField && eyeIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // Compteur de caractères pour l'adresse postale
+        const adressePostale = document.getElementById('adressePostale');
+        const adresseCount = document.getElementById('adresseCount');
+
+        if (adressePostale && adresseCount) {
+            adressePostale.addEventListener('input', function() {
+                const length = this.value.length;
+                adresseCount.textContent = length;
+
+                if (length > 450) {
+                    adresseCount.classList.add('text-warning');
+                    adresseCount.classList.remove('text-danger');
+                } else if (length > 480) {
+                    adresseCount.classList.remove('text-warning');
+                    adresseCount.classList.add('text-danger');
+                } else {
+                    adresseCount.classList.remove('text-warning', 'text-danger');
+                }
+            });
+        }
+
+        // Animation du bouton de soumission
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+                submitBtn.disabled = true;
+            });
+        }
+    });
+</script>
+
+<style>
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+
+    .card {
+        border-radius: 1rem;
+        border: none;
+        overflow: hidden;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .form-section {
+        position: relative;
+    }
+
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-divider {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border-color: #dee2e6;
+        opacity: 0.5;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+        .form-label i {
+            width: 16px;
+            margin-right: 0.5rem;
+        }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+    }
+
+    .alert {
+        border-radius: 0.75rem;
+        border: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);
+        color: #721c24;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .advantage-item {
+        padding: 0.5rem 0;
+        border-left: 3px solid #28a745;
+        padding-left: 0.75rem;
+        margin-left: 0.5rem;
+    }
+
+        .advantage-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s ease;
+        }
+
+    .text-danger {
+        font-weight: 600;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .input-group .btn {
+        border-left: 0;
+    }
+
+    .border-success {
+        border-width: 2px !important;
+        border-color: #28a745 !important;
+    }
+
+    .card-footer {
+        border-top: 1px solid rgba(0,0,0,.125);
+        background-color: #f8f9fa !important;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+</style>

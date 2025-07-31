@@ -1,23 +1,453 @@
-﻿@{
-    ViewBag.Title = "Créer un Employé";
+﻿@model ApiBiblio.Models.Employe
+@{
+    ViewData["Title"] = "Créer un Compte Employé";
 }
-<h2>Créer un Employé</h2>
-@if (ViewBag.Error != null)
-{
-    <div style="color:red;">@ViewBag.Error</div>
-}
-@if (ViewBag.Message != null)
-{
-    <div style="color:green;">@ViewBag.Message</div>
-}
-<form asp-action="Create" method="post">
-    <label>Nom :</label>
-    <input type="text" name="nomEmploye" required /><br />
-    <label>Prénom :</label>
-    <input type="text" name="prenomEmploye" required /><br />
-    <label>Login :</label>
-    <input type="text" name="loginEmploye" required /><br />
-    <label>Mot de passe :</label>
-    <input type="password" name="mdpEmploye" required /><br />
-    <button type="submit">Créer</button>
-</form>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-primary text-white text-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-tie"></i> Créer un Compte Employé
+                    </h3>
+                    <p class="mb-0 mt-2"><small>Création d'un nouveau compte pour le personnel</small></p>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Messages d'erreur ou de succès -->
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle"></i> @ViewBag.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <!-- Formulaire de création -->
+                    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <!-- Informations personnelles -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-user"></i> Informations personnelles
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nomEmploye" class="form-label">
+                                        <i class="fas fa-id-badge text-muted"></i> Nom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="nomEmploye"
+                                           name="nomEmploye"
+                                           placeholder="Nom de famille"
+                                           required
+                                           maxlength="100"
+                                           autocomplete="family-name">
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-times-circle"></i> Veuillez saisir un nom valide.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="prenomEmploye" class="form-label">
+                                        <i class="fas fa-user text-muted"></i> Prénom <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="prenomEmploye"
+                                           name="prenomEmploye"
+                                           placeholder="Prénom"
+                                           required
+                                           maxlength="100"
+                                           autocomplete="given-name">
+                                    <div class="invalid-feedback">
+                                        <i class="fas fa-times-circle"></i> Veuillez saisir un prénom valide.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informations de connexion -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-key"></i> Informations de connexion
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="loginEmploye" class="form-label">
+                                    <i class="fas fa-at text-muted"></i> Login <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       id="loginEmploye"
+                                       name="loginEmploye"
+                                       placeholder="Identifiant de connexion unique"
+                                       required
+                                       maxlength="50"
+                                       autocomplete="username">
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Ce login sera utilisé pour se connecter au système
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Veuillez saisir un login valide.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mdpEmploye" class="form-label">
+                                    <i class="fas fa-lock text-muted"></i> Mot de passe <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input type="password"
+                                           class="form-control form-control-lg"
+                                           id="mdpEmploye"
+                                           name="mdpEmploye"
+                                           placeholder="Mot de passe sécurisé"
+                                           required
+                                           minlength="6"
+                                           autocomplete="new-password">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye" id="eyeIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    <i class="fas fa-shield-alt text-success"></i> Minimum 6 caractères recommandés
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Le mot de passe doit contenir au moins 6 caractères.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rôle et permissions -->
+                        <div class="form-section mb-4">
+                            <h5 class="section-title">
+                                <i class="fas fa-users-cog"></i> Rôle et permissions
+                            </h5>
+                            <hr class="section-divider">
+
+                            <div class="mb-3">
+                                <label for="roleId" class="form-label">
+                                    <i class="fas fa-user-tag text-muted"></i> Type de compte <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select form-select-lg" id="roleId" name="roleId" required>
+                                    <option value="">-- Sélectionnez un rôle --</option>
+                                    @if (ViewBag.Roles != null)
+                                    {
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            <option value="@role.Id">
+                                                @role.NomRole
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle text-primary"></i> Détermine les permissions accordées à cet employé
+                                </div>
+                                <div class="invalid-feedback">
+                                    <i class="fas fa-times-circle"></i> Veuillez sélectionner un rôle.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-lg me-md-2">
+                                <i class="fas fa-arrow-left"></i> Retour à la connexion
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                <i class="fas fa-user-plus"></i> Créer le compte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer avec liens utiles -->
+                <div class="card-footer text-center bg-light">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Besoin d'aide ? Contactez l'administrateur système
+                    </small>
+                    <br>
+                    <div class="mt-2">
+                        <span class="text-muted">Vous cherchez à créer un compte membre ?</span>
+                        <a href="@Url.Action("CreateMembre", "Account")" class="text-decoration-none">
+                            <i class="fas fa-user-friends"></i> Cliquez ici
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations sur les rôles -->
+            <div class="card mt-3 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle"></i> À propos des rôles
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">
+                                <i class="fas fa-crown"></i> Administrateur
+                            </h6>
+                            <p class="small mb-2">Accès complet au système, gestion des utilisateurs et configuration.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-success">
+                                <i class="fas fa-user-tie"></i> Employé
+                            </h6>
+                            <p class="small mb-2">Accès aux fonctionnalités de base du système de bibliothèque.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Informations importantes -->
+            <div class="alert alert-info mt-3" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-lightbulb"></i> Informations importantes
+                </h6>
+                <hr>
+                <ul class="mb-0">
+                    <li>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires</li>
+                    <li>Votre adresse email servira d'identifiant de connexion si renseignée</li>
+                    <li>Toutes vos données sont protégées et confidentielles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript pour améliorer l'expérience utilisateur -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion de l'affichage/masquage du mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('mdpEmploye');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (togglePassword && passwordField && eyeIcon) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+
+                if (type === 'text') {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        // Validation côté client
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Animation du bouton pendant la soumission
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+                    submitBtn.disabled = true;
+                }
+                form.classList.add('was-validated');
+            });
+        }
+
+        // Auto-dismiss des alertes après 5 secondes
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(function(alert) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            });
+        }, 5000);
+
+        // Animation au focus des champs
+        const inputs = document.querySelectorAll('.form-control, .form-select');
+        inputs.forEach(function(input) {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Validation en temps réel du login
+        const loginField = document.getElementById('loginEmploye');
+        if (loginField) {
+            loginField.addEventListener('input', function() {
+                const value = this.value.trim();
+                if (value.length > 0 && value.length < 3) {
+                    this.setCustomValidity('Le login doit contenir au moins 3 caractères');
+                } else if (!/^[a-zA-Z0-9._-]+$/.test(value) && value.length > 0) {
+                    this.setCustomValidity('Le login ne peut contenir que des lettres, chiffres, points, tirets et underscores');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .card {
+        border-radius: 1rem;
+        border: none;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border-bottom: none;
+    }
+
+    .card-footer {
+        border-top: 1px solid rgba(0,0,0,.125);
+        background-color: #f8f9fa !important;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .form-section {
+        position: relative;
+    }
+
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-divider {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border-color: #dee2e6;
+        opacity: 0.5;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+        .form-label i {
+            width: 16px;
+            margin-right: 0.5rem;
+        }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .focused {
+        transform: scale(1.02);
+        transition: transform 0.2s ease;
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        }
+
+    .alert {
+        border-radius: 0.75rem;
+        border: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);
+        color: #721c24;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        color: #155724;
+    }
+
+    .text-danger {
+        font-weight: 600;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .invalid-feedback {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .input-group .btn {
+        border-left: 0;
+    }
+
+    .input-group .form-control:focus {
+        z-index: 3;
+    }
+
+    .border-info {
+        border-width: 2px !important;
+    }
+
+    .card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Sélecteur de rôle avec style personnalisé */
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    }
+</style>

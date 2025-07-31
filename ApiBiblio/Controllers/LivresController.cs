@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization; // AJOUT : Pour les droits
 
 namespace ApiBiblio.Controllers
 {
+    [Authorize]
     public class LivresController : Controller
     {
         private readonly BiblioDb _context;
@@ -34,7 +35,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Details/5
-        [Authorize] // AJOUT : Lecture accessible à tous les employés connectés
+        // AJOUT : Lecture accessible à tous les employés connectés
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,7 +57,7 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Create
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue de création
+        [Authorize(Roles = "Admin, Employe")]
         public IActionResult Create()
         {
             ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur");
@@ -68,15 +69,18 @@ namespace ApiBiblio.Controllers
         // POST: Livres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut créer
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Create([Bind("Id,IdAuteur,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdGenre")] Livre livre)
         {
-            var formData = HttpContext.Request.Form;
-            foreach (var key in formData.Keys)
+            if (ModelState.IsValid)
             {
-                Console.WriteLine($"{key} = {formData[key]}");
+                _context.Add(livre);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
+            // Re-remplir les listes déroulantes si erreur
             ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre.IdAuteur);
             ViewData["IdCategorie"] = new SelectList(_context.Categories, "Id", "NomCategorie", livre.IdCategorie);
             ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre.IdGenre);
@@ -84,7 +88,8 @@ namespace ApiBiblio.Controllers
         }
 
         // GET: Livres/Edit/5
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue d'édition
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,45 +108,9 @@ namespace ApiBiblio.Controllers
             return View(livre);
         }
 
-        // POST: Livres/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut modifier
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdAuteur,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdGenre")] Livre livre)
-        {
-            if (id != livre.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(livre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LivreExists(livre.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre.IdAuteur);
-            ViewData["IdCategorie"] = new SelectList(_context.Categories, "Id", "NomCategorie", livre.IdCategorie);
-            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre.IdGenre);
-            return View(livre);
-        }
-
         // GET: Livres/Delete/5
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut accéder à la vue de suppression
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,7 +134,8 @@ namespace ApiBiblio.Controllers
         // POST: Livres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // AJOUT : Seul l'admin peut supprimer
+        [Authorize(Roles = "Admin, Employe")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var livre = await _context.Livres.FindAsync(id);
