@@ -133,13 +133,13 @@
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.DateEmprunt)</td>
                             <td>
-                                @if (item.DateRetour == null)
+                                @if (item.Statut)  // Statut = true => rendu / terminé
                                 {
-                                    <span class="badge" style="background:#FFD447; color:#284475;">En cours</span>
+                                    <span class="badge" style="background:#72D6C9; color:#284475;">Terminé</span>
                                 }
                                 else
                                 {
-                                    <span class="badge" style="background:#72D6C9; color:#284475;">Terminé</span>
+                                    <span class="badge" style="background:#FFD447; color:#284475;">En cours</span>
                                 }
                             </td>
                             <td>@Html.DisplayFor(modelItem => item.DateRetour)</td>

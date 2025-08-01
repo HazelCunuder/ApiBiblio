@@ -108,6 +108,46 @@ namespace ApiBiblio.Controllers
             return View(livre);
         }
 
+        // POST: Livres/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Employe")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdAuteur,Titre,Disponible,AnnePublication,ISBN,IdCategorie,IdGenre")] Livre livre)
+        {
+            if (id != livre.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(livre);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LivreExists(livre.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            // En cas d'erreur de validation, on recharge les listes déroulantes
+            ViewData["IdAuteur"] = new SelectList(_context.Auteurs, "Id", "NomAuteur", livre.IdAuteur);
+            ViewData["IdCategorie"] = new SelectList(_context.Categories, "Id", "NomCategorie", livre.IdCategorie);
+            ViewData["IdGenre"] = new SelectList(_context.Genres, "Id", "NomGenre", livre.IdGenre);
+
+            return View(livre);
+        }
+
         // GET: Livres/Delete/5
         [Authorize(Roles = "Admin, Employe")]
 
