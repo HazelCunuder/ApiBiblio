@@ -39,15 +39,19 @@ ApiBiblio/
 ```
 
 2. Restaurer les dépendances :
+
        dotnet restore
 
 3. Appliquer les migrations (si nécessaire) :
+
        dotnet ef database update
 
 4. Lancer le serveur :
+
        dotnet run
 
 5. Accéder à l’application :
+
        Ouvrez http://localhost:5000 dans votre navigateur.
 
 ## 🔒 RGPD & Sécurité
