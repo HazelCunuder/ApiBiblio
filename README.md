@@ -54,11 +54,6 @@ ApiBiblio/
 
        Ouvrez http://localhost:5000 dans votre navigateur.
 
-## 🔒 RGPD & Sécurité
-
-- L'application respecte les principes du RGPD, notamment en matière de gestion des comptes utilisateurs.
-- Les mots de passe ne sont jamais affichés en clair dans l'interface.
-- Les rôles des employés sont utilisés pour restreindre l'accès à certaines fonctionnalités.
 
 ## 📄 Documentation API
 
